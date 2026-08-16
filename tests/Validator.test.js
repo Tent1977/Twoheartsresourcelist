@@ -38,8 +38,14 @@ describe('Validator', () => {
       expect(result.valid).toBe(false);
     });
 
-    // MISSING: test for a very short number (e.g. "123" - too few digits)
-    // MISSING: test for an empty string
+    test('rejects a too-short number', () => {
+      expect(validatePhone('123').valid).toBe(false);
+    });
+
+    test('accepts an empty string (treated as not provided)', () => {
+      // The source guards with !phone — empty string is falsy, so treated as absent
+      expect(validatePhone('').valid).toBe(true);
+    });
   });
 
   // ── validateCategory() ────────────────────────────────────────────────────
@@ -59,8 +65,21 @@ describe('Validator', () => {
       expect(validateCategory('FOOD')).toEqual({ valid: true, error: null });
     });
 
-    // MISSING: test with null / undefined / empty string
-    // MISSING: test with non-string type (e.g. number)
+    test('rejects null', () => {
+      expect(validateCategory(null).valid).toBe(false);
+    });
+
+    test('rejects undefined', () => {
+      expect(validateCategory(undefined).valid).toBe(false);
+    });
+
+    test('rejects empty string', () => {
+      expect(validateCategory('').valid).toBe(false);
+    });
+
+    test('rejects a non-string type', () => {
+      expect(validateCategory(42).valid).toBe(false);
+    });
   });
 
   // ── validateHours() ───────────────────────────────────────────────────────
@@ -74,17 +93,50 @@ describe('Validator', () => {
       expect(validateHours('Mon-Fri 9am-5pm')).toEqual({ valid: true, error: null });
     });
 
-    // MISSING: test with empty string (should fail)
-    // MISSING: test with non-string type (should fail)
-    // MISSING: test with null (should pass, it's optional)
+    test('rejects an empty string', () => {
+      expect(validateHours('').valid).toBe(false);
+    });
+
+    test('rejects a non-string type', () => {
+      expect(validateHours(123).valid).toBe(false);
+    });
+
+    test('accepts null (optional field)', () => {
+      expect(validateHours(null)).toEqual({ valid: true, error: null });
+    });
   });
 
   // ── validateZip() ─────────────────────────────────────────────────────────
 
-  // MISSING: validateZip() is entirely untested
-  //   - should accept undefined/null
-  //   - should accept "12345" and "12345-6789"
-  //   - should reject "ABCDE" and "1234" (too short)
+  describe('validateZip()', () => {
+    test('accepts undefined (optional field)', () => {
+      expect(validateZip(undefined)).toEqual({ valid: true, error: null });
+    });
+
+    test('accepts null (optional field)', () => {
+      expect(validateZip(null)).toEqual({ valid: true, error: null });
+    });
+
+    test('accepts a 5-digit ZIP', () => {
+      expect(validateZip('12345')).toEqual({ valid: true, error: null });
+    });
+
+    test('accepts a ZIP+4 format', () => {
+      expect(validateZip('12345-6789')).toEqual({ valid: true, error: null });
+    });
+
+    test('rejects letters', () => {
+      expect(validateZip('ABCDE').valid).toBe(false);
+    });
+
+    test('rejects a too-short number', () => {
+      expect(validateZip('1234').valid).toBe(false);
+    });
+
+    test('rejects a too-long number', () => {
+      expect(validateZip('123456').valid).toBe(false);
+    });
+  });
 
   // ── validateResource() ───────────────────────────────────────────────────
 
@@ -111,8 +163,23 @@ describe('Validator', () => {
       expect(result.errors.length).toBeGreaterThan(1);
     });
 
-    // MISSING: test that an invalid phone AND invalid category are both reported
-    // MISSING: test with all fields absent
-    // MISSING: test that hours validation errors surface in validateResource
+    test('reports both an invalid phone and an invalid category', () => {
+      const result = validateResource({ name: 'X', category: 'not-valid', phone: 'abc' });
+      expect(result.valid).toBe(false);
+      expect(result.errors.some((e) => /category/i.test(e))).toBe(true);
+      expect(result.errors.some((e) => /phone/i.test(e))).toBe(true);
+    });
+
+    test('fails with multiple errors when all fields are absent', () => {
+      const result = validateResource({});
+      expect(result.valid).toBe(false);
+      expect(result.errors.length).toBeGreaterThanOrEqual(2);
+    });
+
+    test('surfaces hours validation errors', () => {
+      const result = validateResource({ name: 'X', category: 'food', hours: '' });
+      expect(result.valid).toBe(false);
+      expect(result.errors.some((e) => /hours/i.test(e))).toBe(true);
+    });
   });
 });
