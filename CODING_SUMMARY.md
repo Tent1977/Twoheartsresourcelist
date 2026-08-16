@@ -2,7 +2,8 @@
 **Account:** ableexperience@gmail.com  
 **Repository:** Tent1977/Twoheartsresourcelist (GitHub)  
 **Active Branch:** `claude/analyze-test-coverage-xVHkm`  
-**Last updated:** 2026-08-16
+**Last updated:** 2026-08-16  
+**Test suite:** 192 tests — all passing
 
 ---
 
@@ -98,59 +99,56 @@ File system persistence using JSON.
 
 ---
 
-## Test Files — Current Coverage
+## Test Coverage — Final Numbers
 
-### `tests/ResourceList.test.js` — ~55% branch coverage
-Tests that exist:
-- `add()`: happy path, missing name, missing category, incrementing ids
-- `remove()`: existing id, non-existent id
-- `getById()`: found and not-found
-- `update()`: field patching
-- `getAll()`: active-only filter
-- `deactivate()`: marks inactive
+192 tests across 6 suites, all passing.
 
-**Known gaps** (documented in `TEST_COVERAGE_ANALYSIS.md`):
-- Whitespace trimming on `add()`
-- Optional fields defaulting to `null`
-- `update()` protecting `id` and `createdAt`; null return on unknown id
-- `getAll()` with category filter
-- `deactivate()` / `reactivate()` edge cases
-- `count()` entirely untested
-- `clear()` entirely untested
+| File | Statements | Branches | Functions | Lines |
+|---|---|---|---|---|
+| `ResourceList.js` | 100% | 100% | 100% | 100% |
+| `Validator.js` | 100% | 100% | 100% | 100% |
+| `Search.js` | 100% | 95% | 100% | 100% |
+| `Stats.js` | 100% | 82% | 100% | 100% |
+| `Storage.js` | 100% | 73% | 100% | 100% |
+| **Overall** | **100%** | **95%** | **100%** | **100%** |
 
-### `tests/Validator.test.js` — ~50% branch coverage
-Tests that exist:
-- `validatePhone()`: null, undefined, valid US number, country code, non-string, obviously invalid
-- `validateCategory()`: all 10 valid categories, unknown category, case-insensitivity
-- `validateHours()`: undefined, valid string
-- `validateResource()`: valid full resource, missing name, multiple errors
+### Test files
 
-**Known gaps:**
-- `validateZip()` — **zero tests**
-- Empty string edge cases for phone and hours
-- `null`/`undefined` for category
-- Multiple simultaneous errors in `validateResource()`
+| File | Tests | Notes |
+|---|---|---|
+| `tests/ResourceList.test.js` | covers all 10 methods including `reactivate()`, `count()`, `clear()` |
+| `tests/Validator.test.js` | covers all 5 functions including full `validateZip()` suite |
+| `tests/Search.test.js` | covers all 6 exports including edge cases and the `query()` pipeline |
+| `tests/Stats.test.js` | covers all 5 exports; empty-list and inactive-exclusion cases |
+| `tests/Storage.test.js` | covers load/save/delete with real temp files; error and round-trip cases |
+| `tests/integration.test.js` | end-to-end save→load→query→stats pipeline |
 
-### Missing test files (0% coverage)
-- `tests/Search.test.js` — not yet created
-- `tests/Stats.test.js` — not yet created
-- `tests/Storage.test.js` — not yet created
-- `tests/integration.test.js` — not yet created
+### Remaining branch gaps (not blocking)
+
+The uncovered branches are defensive guards that are unreachable in normal use:
+- `Search.js` lines 46, 64 — ternary fallbacks inside `filterByCategory` and `sortBy`
+- `Stats.js` lines 13, 27 — `|| 'uncategorized'` and tie-break fallback in `topCategory`
+- `Storage.js` lines 15, 34, 45 — `fs.existsSync` false-paths already covered by `deleteStore` tests; the gaps are in `load` and `save` internal guards
+
+### Notable findings from testing
+
+- **`validatePhone('')`** — empty string is treated as "not provided" (valid) because the source guards with `!phone`. If distinguishing absent from empty matters, the source needs an explicit `phone === ''` check.
+- **Timestamp precision** — `update()` and `reactivate()` can produce the same `updatedAt` as the prior operation if called within the same millisecond. Harmless in production; tests use fake timers to verify the behaviour reliably.
 
 ---
 
-## Test Coverage Improvement Plan (Priority Order)
+## Test Coverage Improvement Plan — Status
 
-| Priority | Task | Effort |
-|---|---|---|
-| P1 | Write `tests/Search.test.js` | Medium |
-| P1 | Write `tests/Storage.test.js` (use temp files) | Medium |
-| P2 | Write `tests/Stats.test.js` | Low |
-| P2 | Fill gaps in `tests/ResourceList.test.js` | Low |
-| P3 | Fill gaps in `tests/Validator.test.js` | Low |
-| P3 | Write `tests/integration.test.js` | High |
+All items completed.
 
-Full details with exact test cases for each: see `TEST_COVERAGE_ANALYSIS.md`.
+| Task | Status |
+|---|---|
+| Write `tests/Search.test.js` | Done |
+| Write `tests/Storage.test.js` | Done |
+| Write `tests/Stats.test.js` | Done |
+| Fill gaps in `tests/ResourceList.test.js` | Done |
+| Fill gaps in `tests/Validator.test.js` | Done |
+| Write `tests/integration.test.js` | Done |
 
 ---
 
@@ -173,15 +171,16 @@ npm run test:watch
 
 | Commit | Description |
 |---|---|
-| Initial commit | Added all source files, partial test files, and TEST_COVERAGE_ANALYSIS.md |
+| `4f9186e` | Initial scaffold — source files, partial tests, coverage analysis |
+| `f6c20de` | Added CODING_SUMMARY.md |
+| `4f20987` | Added Search, Stats, Storage, and integration test files (144 tests) |
+| `3dd299d` | Added .gitignore and package-lock.json |
+| `cd0d64a` | Filled remaining gaps in ResourceList and Validator tests (192 tests) |
 
 ---
 
 ## What's Next / Open Items
 
-1. **Add the three missing test files** (Search, Stats, Storage)
-2. **Fill branch-coverage gaps** in the two existing test files
-3. **Write integration tests** that exercise the full save→load→query pipeline
-4. **Add a linter** (ESLint) to catch style issues automatically
-5. **Consider adding a CLI** (`src/cli.js`) so coordinators can manage resources from the terminal
-6. **Connect `validateResource()` to `ResourceList.add()`** — currently validation and adding are separate steps; wiring them together would prevent invalid records from ever being stored
+1. **Add a linter** (ESLint) to catch style and logic issues automatically
+2. **Consider adding a CLI** (`src/cli.js`) so coordinators can manage resources from the terminal
+3. **Connect `validateResource()` to `ResourceList.add()`** — currently validation and adding are separate steps; wiring them together would prevent invalid records from ever being stored
