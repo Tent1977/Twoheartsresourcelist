@@ -1,2 +1,6 @@
 node_modules/
 coverage/
+
+# Never commit real API keys.
+server/.env
+.env

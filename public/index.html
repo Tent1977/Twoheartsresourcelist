@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en" data-workspace="ABLE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<title>Sightline</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/app.css">
+</head>
+<body>
+
+<!-- Consent gate. Nothing behind this runs until it clears. -->
+<div id="gate">
+  <div class="sheet">
+    <h1>Before you record</h1>
+    <p class="law" id="gate-law"></p>
+
+    <div class="script" id="gate-script"></div>
+
+    <div class="people" id="gate-people"></div>
+    <button class="btn" id="gate-add">+ Add someone in the room</button>
+
+    <p class="blocked" id="gate-blocked" hidden></p>
+
+    <div style="display:flex;gap:8px;margin-top:16px;flex-wrap:wrap">
+      <button class="btn primary" id="gate-start">Everyone said yes — start</button>
+      <button class="btn" id="gate-demo">Run the demo meeting instead</button>
+    </div>
+    <p class="law" style="margin-top:12px">
+      The demo replays a scripted conversation. Nobody is recorded, so you can
+      show this to a partner without asking anyone for consent.
+    </p>
+  </div>
+</div>
+
+<header class="top">
+  <span class="brand">SIGHTLINE</span>
+
+  <div class="ws-switch" role="group" aria-label="Organisation">
+    <button data-ws="ABLE" aria-pressed="true">ABLE</button>
+    <button data-ws="VOA" aria-pressed="false">VOA</button>
+  </div>
+
+  <span class="clock paused" id="clock">00:00:00</span>
+  <span class="wipe-timer" id="wipe">buffer empty</span>
+
+  <span class="spacer"></span>
+
+  <div class="toggles" id="toggles">
+    <button class="toggle" data-flag="tone" aria-pressed="true"><i class="dot"></i>Tone</button>
+    <button class="toggle lime" data-flag="notebook" aria-pressed="true"><i class="dot"></i>Notebook</button>
+    <button class="toggle gold" data-flag="flags" aria-pressed="true"><i class="dot"></i>Flags</button>
+    <button class="toggle violet" data-flag="predict" aria-pressed="true"><i class="dot"></i>Predict</button>
+    <button class="toggle" data-flag="faces" aria-pressed="false"><i class="dot"></i>Face ID</button>
+  </div>
+
+  <button class="btn" id="btn-pause">Pause</button>
+  <button class="btn danger" id="btn-wipe">Wipe now</button>
+</header>
+
+<main class="grid">
+
+  <!-- left column -->
+  <div style="display:grid;gap:12px">
+    <section class="card">
+      <h2>In the room <span class="count" id="people-count">0</span></h2>
+      <div class="body" id="people"><p class="empty">Nobody has spoken yet.</p></div>
+    </section>
+
+    <section class="card">
+      <h2>Tone</h2>
+      <div class="body" id="tone"><p class="empty">Listening.</p></div>
+    </section>
+
+    <section class="card">
+      <h2>Coming next</h2>
+      <div class="body" id="predict"><p class="empty">Not enough conversation yet.</p></div>
+    </section>
+  </div>
+
+  <!-- centre column -->
+  <div style="display:grid;gap:12px">
+    <section class="card">
+      <h2>Transcript <span class="count" id="turn-count">0</span></h2>
+      <div id="transcript"><p class="empty" style="padding:10px">Waiting for the first word.</p></div>
+    </section>
+
+    <section class="card" id="inspector-card" hidden>
+      <h2>Selected line</h2>
+      <div class="body" id="inspector"></div>
+    </section>
+  </div>
+
+  <!-- right column -->
+  <div style="display:grid;gap:12px">
+    <section class="card">
+      <h2>Ask this <span class="count" id="q-count">0</span></h2>
+      <div class="body scroll" id="questions"><p class="empty">Nothing queued.</p></div>
+    </section>
+
+    <section class="card">
+      <h2>Worth checking <span class="count" id="flag-count">0</span></h2>
+      <div class="body scroll" id="flags"><p class="empty">Nothing flagged.</p></div>
+    </section>
+
+    <section class="card">
+      <h2>Routed to projects <span class="count" id="route-count">0</span></h2>
+      <div class="body scroll" id="routing"><p class="empty">Nothing routed yet.</p></div>
+    </section>
+  </div>
+
+</main>
+
+<!-- The notebook that pops up mid-sentence -->
+<aside id="notebook" hidden>
+  <header><span id="nb-kind">Notebook</span><button class="x" id="nb-close">&times;</button></header>
+  <div class="nb-body">
+    <p class="trigger" id="nb-trigger"></p>
+    <strong id="nb-headline"></strong>
+    <p id="nb-note" style="margin:6px 0 0"></p>
+    <ul class="say" id="nb-say"></ul>
+    <p class="avoid" id="nb-avoid" hidden></p>
+  </div>
+</aside>
+
+<script src="/boot.js"></script>
+<script src="/app.js"></script>
+</body>
+</html>

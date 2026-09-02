@@ -6,14 +6,17 @@
   "scripts": {
     "test": "jest --coverage",
     "test:watch": "jest --watch",
-    "start": "node src/index.js"
+    "start": "node src/index.js",
+    "serve": "node server/index.js",
+    "test:sightline": "jest tests/sightline"
   },
   "jest": {
     "testEnvironment": "node",
     "coverageDirectory": "coverage",
     "collectCoverageFrom": [
       "src/**/*.js",
-      "!src/index.js"
+      "!src/index.js",
+      "!src/sightline/index.js"
     ],
     "coverageThreshold": {
       "global": {
