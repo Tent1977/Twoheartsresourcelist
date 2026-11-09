@@ -6,14 +6,16 @@
   "scripts": {
     "test": "jest --coverage",
     "test:watch": "jest --watch",
-    "start": "node src/index.js"
+    "start": "node src/index.js",
+    "start:mcp": "node src/mcp-server.js"
   },
   "jest": {
     "testEnvironment": "node",
     "coverageDirectory": "coverage",
     "collectCoverageFrom": [
       "src/**/*.js",
-      "!src/index.js"
+      "!src/index.js",
+      "!src/mcp-server.js"
     ],
     "coverageThreshold": {
       "global": {
@@ -24,7 +26,9 @@
       }
     }
   },
-  "dependencies": {},
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0"
+  },
   "devDependencies": {
     "jest": "^29.0.0"
   }

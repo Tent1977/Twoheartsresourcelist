@@ -84,6 +84,82 @@ File system persistence using JSON.
 - `deleteStore(filePath?)` — deletes the file; returns `true`/`false`
 - `DEFAULT_PATH` — `<cwd>/data/resources.json`
 
+## MCP Server — Connecting Apps to Claude
+
+This library ships as an **MCP (Model Context Protocol) server** (`src/mcp-server.js`). Any app that supports MCP — including Claude Desktop, Claude Code, and apps built with the Anthropic SDK — can connect to this server and manage community resources through natural language without writing custom integration code.
+
+### Quickstart
+
+```bash
+npm install          # installs @modelcontextprotocol/sdk
+npm run start:mcp    # launches the MCP server on stdio
+```
+
+### Connecting to Claude Desktop
+
+Add this block to your Claude Desktop config file
+(`~/Library/Application Support/Claude/claude_desktop_config.json` on macOS,
+`%APPDATA%\Claude\claude_desktop_config.json` on Windows):
+
+```json
+{
+  "mcpServers": {
+    "twohearts-resources": {
+      "command": "node",
+      "args": ["/absolute/path/to/Twoheartsresourcelist/src/mcp-server.js"]
+    }
+  }
+}
+```
+
+Restart Claude Desktop. Claude will now have access to the community resource tools.
+
+### Connecting via the Anthropic SDK (programmatic)
+
+```javascript
+const Anthropic = require('@anthropic-ai/sdk');
+const { spawn } = require('child_process');
+
+const client = new Anthropic();
+
+// Point the SDK at the MCP server process
+const response = await client.beta.messages.create({
+  model: 'claude-opus-4-5',
+  max_tokens: 1024,
+  tools: [],   // tools come from the MCP server via the SDK's MCP support
+  mcp_servers: [{
+    type: 'stdio',
+    command: 'node',
+    args: ['./src/mcp-server.js'],
+  }],
+  messages: [{ role: 'user', content: 'List all food resources and show me the stats.' }],
+});
+```
+
+Apps that already connect to Claude via the API need only add the `mcp_servers` field — no other changes required.
+
+### Exposed MCP Tools
+
+| Tool | Description |
+|---|---|
+| `list_resources` | All active resources; optional category filter |
+| `search_resources` | Keyword + category filter with sort and pagination |
+| `get_resource` | Single resource by ID |
+| `add_resource` | Create a new resource (validates before saving) |
+| `update_resource` | Patch fields on an existing resource |
+| `deactivate_resource` | Soft-delete (preserves history) |
+| `reactivate_resource` | Re-enable a deactivated resource |
+| `remove_resource` | Permanent delete |
+| `get_stats` | Summary: total, active/inactive, by-category, recently added |
+| `find_incomplete_resources` | Active records missing phone or address |
+| `validate_resource` | Check a resource object without saving it |
+
+### Data persistence
+
+The MCP server loads from and saves to `data/resources.json` (relative to `cwd`) using the same `Storage` module the rest of the library uses. All mutations auto-save.
+
+---
+
 ## Development Workflow
 
 ### Running Tests
