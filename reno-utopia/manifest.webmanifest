@@ -1,0 +1,17 @@
+{
+  "name": "Reno Utopia",
+  "short_name": "Reno Utopia",
+  "description": "Start at Safe Camp and fight your way to the front door with an infinite basket of bananas.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "fullscreen",
+  "orientation": "landscape",
+  "background_color": "#141418",
+  "theme_color": "#141418",
+  "categories": ["games"],
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" },
+    { "src": "icons/icon.svg", "sizes": "any", "type": "image/svg+xml" }
+  ]
+}

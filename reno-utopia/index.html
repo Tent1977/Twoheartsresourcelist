@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>Reno Utopia</title>
+<meta name="description" content="Start at Safe Camp and fight your way to the front door with an infinite basket of bananas.">
+<meta name="theme-color" content="#141418">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Reno Utopia">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<canvas id="game"></canvas>
+
+<button id="btn-pause" class="hud-btn hidden" aria-label="Pause">❚❚</button>
+<div id="touch-ui" class="hidden">
+  <button id="btn-swap" class="touch-btn hidden">SWAP</button>
+  <button id="btn-special" class="touch-btn fart hidden">🔥 FART</button>
+</div>
+
+<section id="screen-title" class="screen">
+  <div class="panel">
+    <div class="logo"><span class="l1">RENO</span><span class="l2">UTOPIA</span></div>
+    <p class="tag">Start at Safe Camp. Fight through the showers, the laundry, the big tent, the cafeteria and the admin offices to reach the front door. The basket of bananas never runs out.</p>
+    <button class="big" data-act="play">▶ PLAY</button>
+    <button data-act="how">HOW TO PLAY</button>
+    <button id="btn-install" class="hidden" data-act="install">📲 INSTALL ON YOUR PHONE</button>
+    <p id="ios-hint" class="hint hidden">On iPhone: tap <b>Share</b> → <b>Add to Home Screen</b> to install.</p>
+    <button data-act="mute">🔊 SOUND ON</button>
+    <p class="best">BEST: <span id="best">0</span> points</p>
+    <p class="fine">A parody. Every character is a fictional stick figure. Not affiliated with, endorsed by, or depicting any real person, agency, county, or nonprofit.</p>
+  </div>
+</section>
+
+<section id="screen-select" class="screen">
+  <div class="panel wide">
+    <h2>PICK YOUR RESIDENT</h2>
+    <div id="class-list"></div>
+    <button data-act="title">← BACK</button>
+  </div>
+</section>
+
+<section id="screen-how" class="screen">
+  <div class="panel">
+    <h2>HOW TO PLAY</h2>
+    <ul class="rules">
+      <li>🍌 Every banana that hits a staff member = <b>1 point</b>. Knocking one out earns a bonus.</li>
+      <li>⭐ Every <b>5 points</b> another resident joins your crew and throws bananas with you.</li>
+      <li>🚪 Clear each zone to unlock the door. Seven zones from <b>Safe Camp</b> to the <b>front entrance</b>.</li>
+      <li>👑 The <b>Big Kahuna</b> guards the exit. If you don't have <b>5 people throwing bananas</b>, he wins.</li>
+      <li>❤️ You get <b>3 lives</b>. Crew members who take too many hits get trespassed.</li>
+      <li>💩 The shower puddles slow you down.</li>
+    </ul>
+    <h3>THE CHAIN OF COMMAND</h3>
+    <ol class="ladder">
+      <li><b>Facility Assistant</b> — swings a mop or broom</li>
+      <li><b>Maintenance</b> — hurls wrenches</li>
+      <li><b>Caseworker</b> — non-stop notebooks</li>
+      <li><b>Supervisor</b> — points a finger; beebees fly, some catch fire</li>
+      <li><b>Assistant Administrator</b> — smacks a ruler, then smacks you</li>
+      <li><b>Administrator</b> — staplers and pens</li>
+      <li><b>THE BIG KAHUNA</b> — all of the above</li>
+    </ol>
+    <h3>CONTROLS</h3>
+    <p><b>Computer:</b> WASD / arrows to move · mouse to aim · click to throw · 1–4 or Q/E or scroll to switch weapons · Space or right-click = Ralph's fart · P = pause · M = mute</p>
+    <p><b>Phone:</b> left thumb moves · right thumb aims and throws · buttons for weapons and the fart</p>
+    <button data-act="title">← BACK</button>
+  </div>
+</section>
+
+<section id="screen-pause" class="screen">
+  <div class="panel">
+    <h2>PAUSED</h2>
+    <button class="big" data-act="resume">▶ RESUME</button>
+    <button data-act="mute">🔊 SOUND ON</button>
+    <button data-act="title">QUIT TO MENU</button>
+  </div>
+</section>
+
+<section id="screen-kick" class="screen">
+  <div class="panel">
+    <h2>THE BIG KAHUNA SAYS NO.</h2>
+    <p id="kick-text" class="quote"></p>
+    <p>You lose a life and get escorted back to the Admin Offices. Rack up points — every 5 brings another banana thrower.</p>
+    <button class="big" data-act="kick-ok">UGH. FINE.</button>
+  </div>
+</section>
+
+<section id="screen-over" class="screen">
+  <div class="panel">
+    <h2>YOU GOT TRESPASSED</h2>
+    <p id="over-why"></p>
+    <div id="over-stats"></div>
+    <button class="big" data-act="retry">↻ TRY AGAIN</button>
+    <button data-act="play">PICK SOMEONE ELSE</button>
+    <button data-act="title">MAIN MENU</button>
+  </div>
+</section>
+
+<section id="screen-win" class="screen">
+  <div class="panel">
+    <h2>YOU MADE IT OUT THE FRONT DOOR</h2>
+    <p class="tag">The Big Kahuna is a pile of ash. Welcome to Reno Utopia.</p>
+    <div id="win-stats"></div>
+    <button class="big" data-act="retry">↻ PLAY AGAIN</button>
+    <button data-act="play">PICK SOMEONE ELSE</button>
+    <button data-act="title">MAIN MENU</button>
+  </div>
+</section>
+
+<script src="zones.js"></script>
+<script src="game.js"></script>
+</body>
+</html>

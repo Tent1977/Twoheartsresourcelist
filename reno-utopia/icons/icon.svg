@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="96" fill="#141418"/>
+  <circle cx="256" cy="256" r="210" fill="#ffd32a"/>
+  <g fill="none" stroke="#111" stroke-width="18" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="200" cy="150" r="42" fill="#fff"/>
+    <path d="M200 192 V318 M200 318 L160 410 M200 318 L240 410 M200 230 L140 280 M200 222 L300 170"/>
+  </g>
+  <path d="M300 150 q70 -20 110 40" fill="none" stroke="#f9ca24" stroke-width="34" stroke-linecap="round"/>
+  <path d="M300 150 q70 -20 110 40" fill="none" stroke="#111" stroke-width="6" stroke-linecap="round" stroke-dasharray="2 400"/>
+  <text x="256" y="470" text-anchor="middle" font-family="Impact, Arial Black, sans-serif" font-size="74" fill="#111">RENO UTOPIA</text>
+</svg>
