@@ -1,40 +1,128 @@
 rules_version = '2';
 
-// Shelter Watch comments — "post now, flag later".
+// Shelter Watch — "post now, flag later".
 // Merge this block into the project's existing rules; do not replace them.
+//
+// Collections
+//   shelterwatch_comments/{id}                 public reviews (no author id stored)
+//   shelterwatch_comments/{id}/reports/{uid}   one report per person, never readable
+//   shelterwatch_authors/{facilityId}__{uid}   private: one review per person per place
+//   shelterwatch_ratelimit/{uid}               private: one post per minute per person
+//
+// Every review is written in one batch: the comment + the author record + the
+// rate-limit record. Every report is one batch: the report doc + reportCount+1.
+// functions/index.js re-screens each new review on the server and holds it if
+// the browser's screen was skipped.
 service cloud.firestore {
   match /databases/{database}/documents {
+
+    function signedIn() { return request.auth != null; }
+
+    function okRating(r, k) { return !(k in r) || (r[k] is int && r[k] >= 1 && r[k] <= 5); }
+    function validRatings(r) {
+      return r is map
+        && r.keys().hasOnly(['happy', 'comfortable', 'affordable', 'residentsFirst', 'clean', 'safe',
+                             'rulesFair', 'privacy', 'staff', 'management', 'recommend'])
+        && okRating(r, 'happy') && okRating(r, 'comfortable') && okRating(r, 'affordable')
+        && okRating(r, 'residentsFirst') && okRating(r, 'clean') && okRating(r, 'safe')
+        && okRating(r, 'rulesFair') && okRating(r, 'privacy') && okRating(r, 'staff')
+        && okRating(r, 'management') && okRating(r, 'recommend');
+    }
+
+    function okFact(f, k, opts) { return !(k in f) || f[k] in opts; }
+    function validFacts(f) {
+      let yn = ['yes', 'no'];
+      return f is map
+        && f.keys().hasOnly(['petsAllowed', 'visitorsAllowed', 'rulesLevel', 'kitchen', 'bathroom',
+                             'furnished', 'staffOnSite', 'peerSupport', 'traumaInformed',
+                             'harmReduction', 'events', 'acceptsRegistrants'])
+        && okFact(f, 'petsAllowed', ['yes', 'no', 'service_animals_only'])
+        && okFact(f, 'visitorsAllowed', ['yes', 'no', 'restricted'])
+        && okFact(f, 'rulesLevel', ['few', 'moderate', 'many'])
+        && okFact(f, 'kitchen', ['individual', 'communal', 'both', 'none'])
+        && okFact(f, 'bathroom', ['private', 'communal', 'both'])
+        && okFact(f, 'furnished', ['yes', 'no', 'partial'])
+        && okFact(f, 'staffOnSite', ['24_7', 'business_hours', 'some', 'none'])
+        && okFact(f, 'peerSupport', yn) && okFact(f, 'traumaInformed', yn)
+        && okFact(f, 'harmReduction', yn) && okFact(f, 'events', yn)
+        && okFact(f, 'acceptsRegistrants', ['yes', 'no', 'case_by_case']);
+    }
+
+    function authorPath(facilityId) {
+      return /databases/$(database)/documents/shelterwatch_authors/$(facilityId + '__' + request.auth.uid);
+    }
+
     match /shelterwatch_comments/{commentId} {
+      // Public: live reviews with fewer than 3 reports, or ones a moderator approved.
+      // Held, hidden and removed reviews are only visible in the Firebase console.
+      allow read: if (resource.data.status == 'visible' && resource.data.reportCount < 3)
+                  || resource.data.status == 'approved';
 
-      // Only public comments can be read. Held/removed comments are visible
-      // to moderators in the Firebase console only.
-      allow read: if resource.data.status in ['visible', 'approved'];
-
-      allow create: if request.auth != null
-        && request.resource.data.authorUid == request.auth.uid
+      allow create: if signedIn()
         && request.resource.data.keys().hasOnly([
              'facilityId', 'text', 'relationship', 'ratings', 'facts',
-             'status', 'heldReasons', 'reports', 'createdAt', 'authorUid'])
+             'status', 'heldReasons', 'reportCount', 'createdAt'])
         && request.resource.data.facilityId is string
+        && request.resource.data.facilityId.size() > 0
+        && request.resource.data.facilityId.size() <= 120
         && request.resource.data.text is string
         && request.resource.data.text.size() >= 10
         && request.resource.data.text.size() <= 3000
         && request.resource.data.relationship in [
              'current_resident', 'former_resident', 'staff',
              'family_or_friend', 'service_provider', 'other']
-        && request.resource.data.ratings is map
-        && request.resource.data.facts is map
+        && validRatings(request.resource.data.ratings)
+        && validFacts(request.resource.data.facts)
         && request.resource.data.status in ['visible', 'held']
-        && request.resource.data.reports == [];
+        && request.resource.data.heldReasons is list
+        && request.resource.data.heldReasons.size() <= 6
+        && request.resource.data.reportCount == 0
+        && request.resource.data.createdAt == request.time
+        // one review per person per place, written in the same batch
+        && getAfter(authorPath(request.resource.data.facilityId)).data.commentId == commentId
+        // one post per minute per person, written in the same batch
+        && getAfter(/databases/$(database)/documents/shelterwatch_ratelimit/$(request.auth.uid)).data.last == request.time;
 
-      // Reporting: a signed-in user may add only their own id to `reports`, once.
-      allow update: if request.auth != null
-        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['reports'])
-        && !(request.auth.uid in resource.data.reports)
-        && request.resource.data.reports.size() == resource.data.reports.size() + 1
-        && request.auth.uid in request.resource.data.reports;
+      // Reporting: only reportCount may change, by exactly +1, and only when
+      // this person's report doc is created in the same batch.
+      allow update: if signedIn()
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['reportCount'])
+        && request.resource.data.reportCount == resource.data.reportCount + 1
+        && !exists(/databases/$(database)/documents/shelterwatch_comments/$(commentId)/reports/$(request.auth.uid))
+        && existsAfter(/databases/$(database)/documents/shelterwatch_comments/$(commentId)/reports/$(request.auth.uid));
 
-      // Moderators approve/remove with the Firebase console or Admin SDK.
+      // Moderators approve/hide/remove with the Firebase console or Admin SDK.
+      allow delete: if false;
+
+      match /reports/{reporterId} {
+        allow read: if false; // who reported whom is never public
+        allow create: if signedIn()
+          && reporterId == request.auth.uid
+          && request.resource.data.keys().hasOnly(['createdAt'])
+          && request.resource.data.createdAt == request.time
+          && getAfter(/databases/$(database)/documents/shelterwatch_comments/$(commentId)).data.reportCount
+             == get(/databases/$(database)/documents/shelterwatch_comments/$(commentId)).data.reportCount + 1;
+        allow update, delete: if false;
+      }
+    }
+
+    match /shelterwatch_authors/{key} {
+      // key = facilityId + '__' + uid. Only the author can see their own record.
+      allow read: if signedIn() && key.matches('.*__' + request.auth.uid);
+      allow create: if signedIn()
+        && key.matches('.*__' + request.auth.uid)
+        && request.resource.data.keys().hasOnly(['commentId'])
+        && request.resource.data.commentId is string;
+      allow update, delete: if false; // one review per person per place, for good
+    }
+
+    match /shelterwatch_ratelimit/{uid} {
+      allow read: if signedIn() && uid == request.auth.uid;
+      allow create, update: if signedIn()
+        && uid == request.auth.uid
+        && request.resource.data.keys().hasOnly(['last'])
+        && request.resource.data.last == request.time
+        && (resource == null || request.time > resource.data.last + duration.value(60, 's'));
       allow delete: if false;
     }
   }

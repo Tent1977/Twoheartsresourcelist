@@ -1,14 +1,31 @@
 /**
- * Shelter Watch comment storage.
+ * Shelter Watch review storage.
  *
- * If config.js provides a Firebase config, comments are stored in Firestore
- * (collection `shelterwatch_comments`) using anonymous sign-in so each person
- * can report a comment only once. Without a config the page runs in DEMO
- * MODE: comments are kept in this browser only and nobody else sees them.
+ * With a Firebase config in config.js, reviews live in Firestore (see
+ * firestore.rules for the data model). Without one the page runs in DEMO
+ * MODE: reviews are kept in this browser only and nobody else sees them.
+ *
+ * Every store returns reviews already passed through moderation.sanitizeStored,
+ * so a corrupted or hostile record can't break or hijack the page.
  */
 (function (root) {
   const COLLECTION = 'shelterwatch_comments';
   const FIREBASE_VERSION = '10.12.2';
+  const LIST_LIMIT = 2000;
+
+  const moderation = () => root.ShelterWatch.moderation;
+  const sanitizeAll = (list) => (Array.isArray(list) ? list : []).map((c) => moderation().sanitizeStored(c)).filter(Boolean);
+
+  function safeStorage() {
+    try {
+      const k = '__sw_test__';
+      localStorage.setItem(k, '1');
+      localStorage.removeItem(k);
+      return localStorage;
+    } catch (e) {
+      return null;
+    }
+  }
 
   function loadScript(src) {
     return new Promise((resolve, reject) => {
@@ -23,48 +40,70 @@
   // ---------- Demo (browser-only) store ----------
   function demoStore() {
     const KEY = 'shelterwatch_demo_comments';
-    const read = () => {
+    const REPORTED = 'shelterwatch_demo_reported';
+    const ls = safeStorage();
+    const readJson = (key, fallback) => {
+      if (!ls) return fallback;
       try {
-        return JSON.parse(localStorage.getItem(KEY) || '[]');
+        const v = JSON.parse(ls.getItem(key));
+        return v == null ? fallback : v;
       } catch (e) {
-        return [];
+        return fallback;
       }
     };
-    const write = (list) => {
+    const writeJson = (key, value) => {
+      if (!ls) return false;
       try {
-        localStorage.setItem(KEY, JSON.stringify(list));
+        ls.setItem(key, JSON.stringify(value));
+        return true;
       } catch (e) {
-        /* storage blocked — comments last until reload */
+        return false;
       }
     };
-    let memory = read();
-    let uid;
-    try {
-      uid = localStorage.getItem('shelterwatch_uid');
-      if (!uid) {
-        uid = `demo-${Math.random().toString(36).slice(2)}`;
-        localStorage.setItem('shelterwatch_uid', uid);
-      }
-    } catch (e) {
+    let memory = sanitizeAll(readJson(KEY, []));
+    let reported = readJson(REPORTED, []);
+    if (!Array.isArray(reported)) reported = [];
+    let uid = ls && ls.getItem('shelterwatch_uid');
+    if (!uid) {
       uid = `demo-${Math.random().toString(36).slice(2)}`;
+      if (ls) ls.setItem('shelterwatch_uid', uid);
     }
+
     return {
       mode: 'demo',
-      async userId() {
-        return uid;
-      },
+      persistent: Boolean(ls),
       async listAll() {
         return memory.slice();
       },
+      async listFor(facilityId) {
+        return memory.filter((c) => c.facilityId === facilityId);
+      },
+      async myReview(facilityId) {
+        return memory.find((c) => c.facilityId === facilityId && c.authorKey === uid) || null;
+      },
+      hasReported(id) {
+        return reported.includes(id);
+      },
       async add(comment) {
-        const saved = { ...comment, id: `d${Date.now()}${Math.random().toString(36).slice(2, 6)}`, authorUid: uid };
-        memory.push(saved);
-        write(memory);
+        if (memory.some((c) => c.facilityId === comment.facilityId && c.authorKey === uid)) {
+          throw new Error('You already reviewed this place.');
+        }
+        const saved = moderation().sanitizeStored({
+          ...comment,
+          id: `d${Date.now()}${Math.random().toString(36).slice(2, 6)}`,
+          authorKey: uid,
+        });
+        const next = [...memory, saved];
+        if (ls && !writeJson(KEY, next)) throw new Error('Your phone is out of storage space, so the review was not saved.');
+        memory = next;
         return saved;
       },
-      async report(id, reporterId) {
-        memory = memory.map((c) => (c.id === id ? root.ShelterWatch.moderation.report(c, reporterId) : c));
-        write(memory);
+      async report(id) {
+        if (reported.includes(id)) return;
+        memory = memory.map((c) => (c.id === id ? moderation().addReport(c) : c));
+        reported = [...reported, id];
+        writeJson(KEY, memory);
+        writeJson(REPORTED, reported);
       },
     };
   }
@@ -80,23 +119,77 @@
     if (!auth.currentUser) await auth.signInAnonymously();
     const db = app.firestore();
     const col = db.collection(COLLECTION);
+    const ts = () => firebase.firestore.FieldValue.serverTimestamp();
+    const toPlain = (d) => {
+      const data = d.data();
+      const created = data.createdAt && data.createdAt.toDate ? data.createdAt.toDate().toISOString() : data.createdAt;
+      return { ...data, id: d.id, createdAt: created };
+    };
+    const reportedKey = `shelterwatch_reported_${auth.currentUser.uid}`;
+    const ls = safeStorage();
+    let reported = [];
+    try {
+      reported = JSON.parse((ls && ls.getItem(reportedKey)) || '[]');
+    } catch (e) {
+      reported = [];
+    }
+
+    // Rules only allow reading public reviews, so every query filters on that.
+    async function publicQuery(q) {
+      const [live, approved] = await Promise.all([
+        q.where('status', '==', 'visible').where('reportCount', '<', 3).limit(LIST_LIMIT).get(),
+        q.where('status', '==', 'approved').limit(LIST_LIMIT).get(),
+      ]);
+      return sanitizeAll([...live.docs, ...approved.docs].map(toPlain));
+    }
+
     return {
       mode: 'live',
-      async userId() {
-        return auth.currentUser.uid;
+      persistent: true,
+      listAll: () => publicQuery(col),
+      listFor: (facilityId) => publicQuery(col.where('facilityId', '==', facilityId)),
+      async myReview(facilityId) {
+        const a = await db.collection('shelterwatch_authors').doc(`${facilityId}__${auth.currentUser.uid}`).get();
+        return a.exists ? { id: a.data().commentId } : null;
       },
-      async listAll() {
-        // Rules only allow reading public statuses, so the query must filter on them.
-        const snap = await col.where('status', 'in', ['visible', 'approved']).get();
-        return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+      hasReported(id) {
+        return reported.includes(id);
       },
       async add(comment) {
-        const data = { ...comment, authorUid: auth.currentUser.uid };
-        const ref = await col.add(data);
-        return { id: ref.id, ...data };
+        const uid = auth.currentUser.uid;
+        const ref = col.doc();
+        const batch = db.batch();
+        batch.set(ref, { ...comment, reportCount: 0, createdAt: ts() });
+        batch.set(db.collection('shelterwatch_authors').doc(`${comment.facilityId}__${uid}`), { commentId: ref.id });
+        batch.set(db.collection('shelterwatch_ratelimit').doc(uid), { last: ts() });
+        try {
+          await batch.commit();
+        } catch (e) {
+          if (e && e.code === 'permission-denied') {
+            throw new Error('Not posted. You can review each place once, and post once a minute.');
+          }
+          throw new Error('Not posted — check your connection and try again.');
+        }
+        return moderation().sanitizeStored({ ...comment, id: ref.id });
       },
-      async report(id, reporterId) {
-        await col.doc(id).update({ reports: firebase.firestore.FieldValue.arrayUnion(reporterId) });
+      async report(id) {
+        const uid = auth.currentUser.uid;
+        const ref = col.doc(id);
+        const batch = db.batch();
+        batch.set(ref.collection('reports').doc(uid), { createdAt: ts() });
+        batch.update(ref, { reportCount: firebase.firestore.FieldValue.increment(1) });
+        try {
+          await batch.commit();
+        } catch (e) {
+          if (e && e.code === 'permission-denied') throw new Error('You already reported this review.');
+          throw new Error('Report not sent — check your connection and try again.');
+        }
+        reported = [...reported, id];
+        try {
+          if (ls) ls.setItem(reportedKey, JSON.stringify(reported));
+        } catch (e) {
+          /* not critical */
+        }
       },
     };
   }

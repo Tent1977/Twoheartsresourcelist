@@ -23,14 +23,18 @@
 
   const round1 = (n) => Math.round(n * 10) / 10;
 
-  /** Average of each rating dimension across public comments. */
+  /**
+   * Average of each rating dimension. Only residents (and their family or
+   * friends) count, one review per person; staff and providers are shown
+   * but don't move the numbers.
+   */
   function aggregate(comments) {
     const out = {};
     schema.DIMENSIONS.forEach((d) => {
       out[d.key] = { label: d.label, average: null, count: 0 };
     });
-    (comments || []).filter(moderation.isPublic).forEach((c) => {
-      Object.entries(c.ratings || {}).forEach(([k, v]) => {
+    factcheck.residentComments(comments).forEach((c) => {
+      Object.entries(moderation.sanitizeRatings(c.ratings)).forEach(([k, v]) => {
         if (!out[k]) return;
         out[k].count += 1;
         out[k].sum = (out[k].sum || 0) + v;
@@ -52,7 +56,7 @@
   }
 
   function ratedReviewCount(comments) {
-    return (comments || []).filter((c) => moderation.isPublic(c) && Object.keys(c.ratings || {}).length > 0).length;
+    return factcheck.residentComments(comments).filter((c) => Object.keys(moderation.sanitizeRatings(c.ratings)).length > 0).length;
   }
 
   /**
@@ -97,22 +101,22 @@
     explanation.push(
       residents === null
         ? 'No resident ratings yet.'
-        : `Residents: ${components.residents}/100 from ${reviews} rated review${reviews === 1 ? '' : 's'}.`
+        : `Residents: ${components.residents}/100 from ${reviews} resident review${reviews === 1 ? '' : 's'} (staff reviews don't count).`
     );
     explanation.push(
       accountability === null
-        ? 'Fact checker: nothing checked yet, so this part is left out.'
-        : `Fact checker: ${counts.contradicted} contradicted, ${counts.disputed} disputed out of ${checked} checked.`
+        ? 'Fact checker: nothing to compare yet, so this part is left out.'
+        : `Fact checker: ${counts.contradicted} wrong, ${counts.disputed} disputed, out of ${checked} compared.`
     );
     explanation.push(
       asked
-        ? `Transparency: the establishment has stated ${stated} of ${schema.FACT_KEYS.length} facts.`
-        : 'Transparency: the establishment has not been asked yet, so this part is left out.'
+        ? `Openness: the place has answered ${stated} of ${schema.FACT_KEYS.length} questions.`
+        : 'Openness: we have not asked the place yet, so this part is left out.'
     );
-    explanation.push(`Research on this listing is ${facility && facility.researchConfidence ? facility.researchConfidence : 'low'} confidence.`);
+    explanation.push(`Our research on this listing is ${facility && facility.researchConfidence ? facility.researchConfidence : 'low'} confidence.`);
 
     if (reviews < MIN_REVIEWS) {
-      explanation.unshift(`Not enough data: needs at least ${MIN_REVIEWS} rated reviews (has ${reviews}).`);
+      explanation.unshift(`No score yet: needs ${MIN_REVIEWS} resident reviews with ratings (has ${reviews}).`);
       return { score: null, stars: null, status: 'not_enough_data', reviews, components, explanation };
     }
 
@@ -124,7 +128,7 @@
       total += components[k] * w;
       weight += w;
     });
-    const score = Math.round(total / weight);
+    const score = Math.max(0, Math.min(100, Math.round(total / weight)));
     const stars = Math.round((score / 20) * 2) / 2;
     return { score, stars, status: 'rated', reviews, components, explanation };
   }

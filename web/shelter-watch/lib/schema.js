@@ -69,6 +69,62 @@
     return facts;
   }
 
+  const PHONE_RE = /(?:\b1[\s.-]?)?\(?\b(\d{3})\)?[\s.-]?(\d{3})[\s.-]?(\d{4})\b|\b(211|311|911|988)\b/g;
+  const STREET_WORDS =
+    /\b\d{1,6}\s+(?:[NSEW]\.?\s+)?(?:[A-Za-z]+\s+){1,3}(?:St|Street|Ave|Avenue|Rd|Road|Dr|Drive|Blvd|Way|Ln|Lane|Ct|Court|Pl|Place|Pkwy|Cir)\b\.?|\b[A-Z][a-z]+\s+(?:St|Street|Ave|Avenue|Rd|Road|Dr|Drive|Blvd|Way|Ln|Lane)\b\.?(?:\s+(?:facility|site|campus|location))?/g;
+
+  /**
+   * Split a free-text phone field into callable numbers with labels.
+   * "24-hr hotline (775) 322-3466; office (775) 324-3766" →
+   *   [{ number: '7753223466', display: '(775) 322-3466', label: '24-hr hotline' }, ...]
+   * 3-digit lines (211, 311, 911, 988) are kept as-is.
+   */
+  function parsePhones(text) {
+    if (!text || typeof text !== 'string') return [];
+    const out = [];
+    let consumed = 0; // end of the previous number and its trailing "(label)"
+    [...text.matchAll(PHONE_RE)].forEach((m) => {
+      const before = text.slice(consumed, m.index);
+      const end = m.index + m[0].length;
+      const after = text.slice(end).match(/^\s*\(([^()]*)\)/);
+      const afterLabel = after && !/\d{3}/.test(after[1]) ? after[1] : '';
+      consumed = afterLabel ? end + after[0].length : end;
+      const label = `${before} ${afterLabel}`
+        .replace(/[();,]/g, ' ')
+        .replace(/\b(or|also|alt\.?|listed|and)\b/gi, ' ')
+        .replace(/\s+/g, ' ')
+        .trim()
+        .replace(/^[-:\s]+|[-:\s]+$/g, '');
+      let number;
+      let display;
+      if (m[4]) {
+        number = m[4];
+        display = m[4];
+      } else {
+        number = `${m[1]}${m[2]}${m[3]}`;
+        display = `(${m[1]}) ${m[2]}-${m[3]}`;
+      }
+      if (!out.some((p) => p.number === number)) out.push({ number, display, label: label || null });
+    });
+    return out;
+  }
+
+  /** Remove street names / numbered addresses from free text (for confidential sites). */
+  function scrubLocation(text) {
+    if (text == null) return null;
+    return String(text).replace(STREET_WORDS, '[location withheld]');
+  }
+
+  /** Lowercase, straighten quotes, drop apostrophes, collapse spaces — for search. */
+  function normalizeSearch(text) {
+    return String(text || '')
+      .normalize('NFKC')
+      .toLowerCase()
+      .replace(/[\u2018\u2019\u02bc'`]/g, '')
+      .replace(/[^a-z0-9+]+/g, ' ')
+      .trim();
+  }
+
   function isConfidential(record) {
     if (!record) return false;
     if (CONFIDENTIAL_CATEGORIES.includes(record.category)) return true;
@@ -82,26 +138,32 @@
   function toFacility(record) {
     if (!record || !record.id || !record.name) throw new Error('Record needs id and name');
     const confidential = isConfidential(record);
+    const hide = (v) => (confidential ? scrubLocation(v) : v);
+    const sources = (Array.isArray(record.sources) ? record.sources : [])
+      .map((u) => String(u).trim().replace(/ /g, '%20'))
+      .filter((u) => /^https?:\/\//i.test(u));
     return {
       id: record.id,
       name: record.name,
       group: record.group || null,
       category: record.category || null,
       operator: record.operator || null,
-      population: record.population || null,
+      population: hide(record.population || null),
       address: confidential ? 'Confidential — call for intake' : record.address || null,
       city: record.city || null,
       phone: record.phone || null,
+      phones: parsePhones(record.phone),
       website: record.website || null,
-      howToApply: record.how_to_apply || null,
-      units: record.units == null ? null : record.units,
+      howToApply: hide(record.how_to_apply || null),
+      units: confidential || record.units == null ? null : record.units,
       status: record.status || null,
       waitlist: record.waitlist_status || null,
       rent: record.typical_rent || record.cost || null,
       funding: record.funding || null,
       researchConfidence: record.confidence || 'low',
-      researchNotes: record.notes || null,
-      sources: Array.isArray(record.sources) ? record.sources : [],
+      // Notes and source links can reveal where a confidential site is, so they are withheld.
+      researchNotes: confidential ? null : record.notes || null,
+      sources: confidential ? [] : sources,
       confidential,
       establishmentAskedAt: null, // set when Shelter Watch requests facts from the operator
       leadership: [],
@@ -118,6 +180,9 @@
     CONFIDENTIAL_CATEGORIES,
     emptyFacts,
     isConfidential,
+    parsePhones,
+    scrubLocation,
+    normalizeSearch,
     toFacility,
   };
 });

@@ -3,38 +3,48 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Shelter Watch</title>
-  <meta name="description" content="Shelter and housing watch for Reno, Sparks and Washoe County — facts, resident reviews, and a fact checker.">
+  <title>Shelter Watch — Washoe County shelter &amp; housing</title>
+  <meta name="description" content="Shelter and housing in Reno, Sparks and Washoe County — what places say, what residents say, and what checks out.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.gstatic.com; style-src 'self'; img-src 'self' data:; connect-src 'self' https://*.googleapis.com https://*.firebaseio.com https://*.cloudfunctions.net; frame-src https://*.firebaseapp.com; base-uri 'none'; form-action 'self'; object-src 'none'">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+  <a class="skip" href="#app">Skip to main content</a>
+
+  <aside class="help-strip" aria-label="Get help now">
+    <div class="wrap">
+      <a href="tel:911"><strong>911</strong> In danger</a>
+      <a href="tel:211"><strong>211</strong> Shelter &amp; help</a>
+      <a href="tel:7753294150"><strong>(775) 329-4150</strong> Domestic violence 24/7</a>
+      <a href="tel:988"><strong>988</strong> Crisis line</a>
+    </div>
+  </aside>
+
   <header class="site-header">
     <div class="wrap">
       <a href="#/" class="brand">Shelter Watch</a>
-      <p class="tagline">Shelters and housing in Reno, Sparks &amp; Washoe County — what they say, what residents say, and what checks out.</p>
+      <p class="tagline">Shelter and housing in Reno, Sparks &amp; Washoe County. What places say, what residents say, and what checks out.</p>
     </div>
   </header>
 
   <div id="banner" class="wrap"></div>
 
-  <main id="app" class="wrap" aria-live="polite">
-    <p>Loading…</p>
+  <main id="app" class="wrap" tabindex="-1">
+    <p class="loading">Loading places…</p>
   </main>
+
+  <div id="sr-status" class="visually-hidden" role="status" aria-live="polite"></div>
 
   <footer class="site-footer">
     <div class="wrap">
-      <p><strong>About this site.</strong> Shelter Watch is an independent community project. The
-        Advisory Board of Lived Experience (ABLE) serves as an advisory partner only — ABLE does not
-        operate, inspect or rate any facility.</p>
-      <p><strong>Affiliations, disclosed.</strong> People involved in this project are connected to
-        organizations listed here, including Volunteers of America (Northern California &amp; Northern
-        Nevada) and RISE (Reno Initiative for Shelter and Equality), which is ABLE's fiscal sponsor.
-        Ratings are calculated the same way for every facility, and the formula is shown on every page.</p>
-      <p><strong>Research draft.</strong> Listings were compiled in November 2026 from public sources and
-        many are not yet confirmed by phone. Always call before you go. In an emergency call 911;
-        for shelter and services call 211.</p>
-      <p>Reviews are the opinions of the people who wrote them. Do not post phone numbers, emails,
-        or anyone's private information. Report anything that crosses the line.</p>
+      <p><strong>Who we are.</strong> Shelter Watch is an independent community project. The Advisory Board
+        of Lived Experience (ABLE) gives advice only. ABLE does not run, inspect or rate any place.</p>
+      <p><strong>Our connections.</strong> Some people on this project are connected to places listed here,
+        including Volunteers of America and RISE. Every place is scored with the same formula, shown on its page.</p>
+      <p><strong>Call before you go.</strong> We gathered these listings in November 2026 and have not
+        confirmed all of them by phone yet.</p>
+      <p>Reviews are the writers' own opinions. Report anything that crosses the line.</p>
     </div>
   </footer>
 

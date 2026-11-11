@@ -263,7 +263,7 @@
     "operator": "Safe Embrace",
     "category": "dv_shelter",
     "population": "DV, sexual assault and trafficking survivors of all genders, LGBTQIA2+, disabled, and minor children; pet friendly",
-    "address": "Office 220 S Rock Blvd, Suite 7, Reno; shelter confidential",
+    "address": "confidential",
     "city": "Reno",
     "phone": "24-hr hotline (775) 322-3466; office (775) 324-3766",
     "website": "https://safeembrace.org",
@@ -275,8 +275,7 @@
     "sources": [
       "https://washoecounty.gov/hsa/resource_guide/domestic_violence/shelter.php",
       "https://www.kunr.org/local-stories/2022-08-04/why-one-washoe-county-domestic-violence-shelter-may-close",
-      "https://www.kunr.org/2025-01-31/federal-funding-freeze-endangered-nonprofit-helping-domestic-violence-survivors",
-      "https://domesticshelters.org/help/nv/reno/89502/safe-embrace"
+      "https://www.kunr.org/2025-01-31/federal-funding-freeze-endangered-nonprofit-helping-domestic-violence-survivors"
     ],
     "confidence": "medium"
   },
@@ -290,7 +289,7 @@
     "phone": "24-hr hotline (775) 329-4150",
     "website": null,
     "intake": "Call 24-hr hotline",
-    "capacity": "25 beds currently (temporary site); new facility 100 beds/42 rooms",
+    "capacity": "25 beds currently (temporary site); new [location withheld] 100 beds/42 rooms",
     "funding": "$30.7M private philanthropy for new building; grants",
     "status": "open (temporary location; new facility under construction)",
     "notes": "Shelter relocated fall 2025 for construction; new ~40-41k sq ft shelter targeted summer/June 2027 (was early 2027).",
@@ -306,7 +305,7 @@
     "operator": "Inter-Tribal Council of Nevada (ITCN)",
     "category": "dv_shelter",
     "population": "Native American women and children affected by DV, sexual assault, child abuse, stalking",
-    "address": "Confidential (Washoe County)",
+    "address": "confidential",
     "city": "Reno area",
     "phone": null,
     "website": "https://itcn.org",

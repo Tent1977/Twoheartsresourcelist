@@ -22,20 +22,38 @@
   const MIN_AGREEMENT = 0.6;
 
   const VERDICTS = {
-    verified: 'Verified — matches independent evidence',
-    contradicted: 'Contradicted — establishment claim does not match the evidence',
-    disputed: 'Disputed — residents say something different from the establishment',
-    consistent: 'Consistent — residents and establishment agree (not independently verified)',
-    unverified: 'Unverified — only one side has spoken',
+    verified: 'Checked — proof matches what the place says',
+    contradicted: 'Wrong — the place says one thing, the proof shows another',
+    disputed: 'Disputed — residents say something different from the place',
+    consistent: 'Agree — residents and the place say the same (not yet proven)',
+    unverified: 'One side only — not enough to compare yet',
     unknown: 'Unknown — no information yet',
   };
 
+  /**
+   * Public comments from residents (and their family/friends), one per author:
+   * if the same author posted twice, only their latest comment counts.
+   */
+  function residentComments(comments) {
+    const byAuthor = new Map();
+    const anon = [];
+    (comments || [])
+      .filter((c) => moderation.isPublic(c) && RESIDENT_VOICES.includes(c.relationship))
+      .forEach((c) => {
+        if (!c.authorKey) return anon.push(c);
+        const prev = byAuthor.get(c.authorKey);
+        if (!prev || String(c.createdAt) > String(prev.createdAt)) byAuthor.set(c.authorKey, c);
+      });
+    return [...anon, ...byAuthor.values()];
+  }
+
   /** Residents' answer to one fact, or null if there isn't a clear consensus. */
   function residentConsensus(comments, factKey) {
-    const answers = (comments || [])
-      .filter((c) => moderation.isPublic(c) && RESIDENT_VOICES.includes(c.relationship))
+    const def = schema.FACTS.find((f) => f.key === factKey);
+    const allowed = def && def.options ? def.options : [];
+    const answers = residentComments(comments)
       .map((c) => c.facts && c.facts[factKey])
-      .filter((v) => v !== undefined && v !== null && v !== '');
+      .filter((v) => allowed.includes(v));
     if (answers.length === 0) return { value: null, count: 0, agreement: 0, clear: false };
     const tally = {};
     answers.forEach((v) => {
@@ -81,5 +99,5 @@
     return counts;
   }
 
-  return { VERDICTS, RESIDENT_VOICES, MIN_REPORTS, MIN_AGREEMENT, residentConsensus, checkFact, checkFacility, summarize };
+  return { VERDICTS, RESIDENT_VOICES, residentComments, MIN_REPORTS, MIN_AGREEMENT, residentConsensus, checkFact, checkFacility, summarize };
 });
