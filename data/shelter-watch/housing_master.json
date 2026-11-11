@@ -21,7 +21,7 @@
     "confidence": "medium",
     "group": "Affordable / Low-cost",
     "also_in": [],
-    "id": "SW-001"
+    "id": "moana-apt-homes"
   },
   {
     "name": "Orvis Ring Park Apartments",
@@ -46,7 +46,7 @@
     "confidence": "medium",
     "group": "Affordable / Low-cost",
     "also_in": [],
-    "id": "SW-002"
+    "id": "orvis-ring-park-apartments"
   },
   {
     "name": "Pinewood Terrace Apartments",
@@ -71,7 +71,7 @@
     "confidence": "medium",
     "group": "Affordable / Low-cost",
     "also_in": [],
-    "id": "SW-003"
+    "id": "pinewood-terrace-apartments"
   },
   {
     "name": "Reno Housing Authority Housing Choice Voucher (Section 8) Program",
@@ -97,7 +97,7 @@
     "confidence": "high",
     "group": "Affordable / Low-cost",
     "also_in": [],
-    "id": "SW-004"
+    "id": "reno-housing-authority-housing-choice-voucher-section-8-prog"
   },
   {
     "name": "521 Lake St workforce housing",
@@ -121,7 +121,7 @@
     "confidence": "medium",
     "group": "Affordable / Low-cost",
     "also_in": [],
-    "id": "SW-005"
+    "id": "521-lake-st-workforce-housing"
   },
   {
     "name": "I Street Apartments (2026 I St)",
@@ -146,7 +146,7 @@
     "confidence": "high",
     "group": "Affordable / Low-cost",
     "also_in": [],
-    "id": "SW-006"
+    "id": "i-street-apartments-2026-i-st"
   },
   {
     "name": "Jacobs/RHA 65-unit building (465 W 2nd St)",
@@ -171,7 +171,7 @@
     "confidence": "medium",
     "group": "Affordable / Low-cost",
     "also_in": [],
-    "id": "SW-007"
+    "id": "jacobs-rha-65-unit-building-465-w-2nd-st"
   },
   {
     "name": "Maple Leaves",
@@ -196,7 +196,7 @@
     "confidence": "high",
     "group": "Affordable / Low-cost",
     "also_in": [],
-    "id": "SW-008"
+    "id": "maple-leaves"
   },
   {
     "name": "Marvel Way Apartments",
@@ -221,7 +221,7 @@
     "confidence": "medium",
     "group": "Affordable / Low-cost",
     "also_in": [],
-    "id": "SW-009"
+    "id": "marvel-way-apartments"
   },
   {
     "name": "Railyard Flats",
@@ -246,7 +246,7 @@
     "confidence": "high",
     "group": "Affordable / Low-cost",
     "also_in": [],
-    "id": "SW-010"
+    "id": "railyard-flats"
   },
   {
     "name": "Reno Housing Authority - Public Housing (8 complexes, ~750 units)",
@@ -272,7 +272,7 @@
     "confidence": "high",
     "group": "Affordable / Low-cost",
     "also_in": [],
-    "id": "SW-011"
+    "id": "reno-housing-authority-public-housing-8-complexes-750-units"
   },
   {
     "name": "Riverside Artist Lofts",
@@ -296,7 +296,7 @@
     "confidence": "low",
     "group": "Affordable / Low-cost",
     "also_in": [],
-    "id": "SW-012"
+    "id": "riverside-artist-lofts"
   },
   {
     "name": "Sarrazin Arms Apartments",
@@ -321,7 +321,7 @@
     "confidence": "medium",
     "group": "Affordable / Low-cost",
     "also_in": [],
-    "id": "SW-013"
+    "id": "sarrazin-arms-apartments"
   },
   {
     "name": "Sierra Cove",
@@ -345,7 +345,7 @@
     "confidence": "low",
     "group": "Affordable / Low-cost",
     "also_in": [],
-    "id": "SW-014"
+    "id": "sierra-cove"
   },
   {
     "name": "The Afton at Sparks Marina",
@@ -372,7 +372,7 @@
     "confidence": "high",
     "group": "Affordable / Low-cost",
     "also_in": [],
-    "id": "SW-015"
+    "id": "the-afton-at-sparks-marina"
   },
   {
     "name": "440 Reno Avenue",
@@ -398,7 +398,7 @@
     "confidence": "high",
     "group": "Affordable / Low-cost",
     "also_in": [],
-    "id": "SW-016"
+    "id": "440-reno-avenue"
   },
   {
     "name": "Alpine Haven Apartments",
@@ -424,7 +424,7 @@
     "confidence": "high",
     "group": "Affordable / Low-cost",
     "also_in": [],
-    "id": "SW-017"
+    "id": "alpine-haven-apartments"
   },
   {
     "name": "Aspen Terrace Apartments",
@@ -448,7 +448,7 @@
     "confidence": "low",
     "group": "Affordable / Low-cost",
     "also_in": [],
-    "id": "SW-018"
+    "id": "aspen-terrace-apartments"
   },
   {
     "name": "Austin Crest Apartments",
@@ -472,7 +472,7 @@
     "confidence": "low",
     "group": "Affordable / Low-cost",
     "also_in": [],
-    "id": "SW-019"
+    "id": "austin-crest-apartments"
   },
   {
     "name": "Banbridge Apartments",
@@ -496,7 +496,7 @@
     "confidence": "low",
     "group": "Affordable / Low-cost",
     "also_in": [],
-    "id": "SW-020"
+    "id": "banbridge-apartments"
   },
   {
     "name": "Boulder Creek Apartments",
@@ -520,7 +520,7 @@
     "confidence": "medium",
     "group": "Affordable / Low-cost",
     "also_in": [],
-    "id": "SW-021"
+    "id": "boulder-creek-apartments"
   },
   {
     "name": "City Center Apartments",
@@ -545,7 +545,7 @@
     "confidence": "medium",
     "group": "Affordable / Low-cost",
     "also_in": [],
-    "id": "SW-022"
+    "id": "city-center-apartments"
   },
   {
     "name": "Juniper Village",
@@ -571,7 +571,7 @@
     "confidence": "high",
     "group": "Affordable / Low-cost",
     "also_in": [],
-    "id": "SW-023"
+    "id": "juniper-village"
   },
   {
     "name": "Pinyon Apartments",
@@ -598,7 +598,7 @@
     "confidence": "high",
     "group": "Affordable / Low-cost",
     "also_in": [],
-    "id": "SW-024"
+    "id": "pinyon-apartments"
   },
   {
     "name": "Rail House (306 10th St)",
@@ -623,7 +623,7 @@
     "confidence": "high",
     "group": "Affordable / Low-cost",
     "also_in": [],
-    "id": "SW-025"
+    "id": "rail-house-306-10th-st"
   },
   {
     "name": "Silver Terrace Apartments",
@@ -647,7 +647,7 @@
     "confidence": "low",
     "group": "Affordable / Low-cost",
     "also_in": [],
-    "id": "SW-026"
+    "id": "silver-terrace-apartments"
   },
   {
     "name": "Sky Mountain by Vintage",
@@ -671,7 +671,7 @@
     "confidence": "medium",
     "group": "Affordable / Low-cost",
     "also_in": [],
-    "id": "SW-027"
+    "id": "sky-mountain-by-vintage"
   },
   {
     "name": "Skyline Flats",
@@ -696,7 +696,7 @@
     "confidence": "high",
     "group": "Affordable / Low-cost",
     "also_in": [],
-    "id": "SW-028"
+    "id": "skyline-flats"
   },
   {
     "name": "South Peak by Vintage (formerly Diamond Creek Apartments)",
@@ -721,7 +721,7 @@
     "confidence": "medium",
     "group": "Affordable / Low-cost",
     "also_in": [],
-    "id": "SW-029"
+    "id": "south-peak-by-vintage-formerly-diamond-creek-apartments"
   },
   {
     "name": "Southridge Apartments I",
@@ -746,7 +746,7 @@
     "confidence": "medium",
     "group": "Affordable / Low-cost",
     "also_in": [],
-    "id": "SW-030"
+    "id": "southridge-apartments-i"
   },
   {
     "name": "Southwest Village Apartments",
@@ -770,7 +770,7 @@
     "confidence": "medium",
     "group": "Affordable / Low-cost",
     "also_in": [],
-    "id": "SW-031"
+    "id": "southwest-village-apartments"
   },
   {
     "name": "Steamboat by Vintage",
@@ -795,7 +795,7 @@
     "confidence": "high",
     "group": "Affordable / Low-cost",
     "also_in": [],
-    "id": "SW-032"
+    "id": "steamboat-by-vintage"
   },
   {
     "name": "Summit Ridge Apartments / Summit Heights Senior Apartments Phase 1 (HOME FY2025)",
@@ -819,7 +819,7 @@
     "confidence": "low",
     "group": "Affordable / Low-cost",
     "also_in": [],
-    "id": "SW-033"
+    "id": "summit-ridge-apartments-summit-heights-senior-apartments-pha"
   },
   {
     "name": "Terracina Reno",
@@ -843,7 +843,7 @@
     "confidence": "low",
     "group": "Affordable / Low-cost",
     "also_in": [],
-    "id": "SW-034"
+    "id": "terracina-reno"
   },
   {
     "name": "The Bluffs Apartments",
@@ -868,7 +868,7 @@
     "confidence": "medium",
     "group": "Affordable / Low-cost",
     "also_in": [],
-    "id": "SW-035"
+    "id": "the-bluffs-apartments"
   },
   {
     "name": "The Prospector",
@@ -894,7 +894,7 @@
     "confidence": "high",
     "group": "Affordable / Low-cost",
     "also_in": [],
-    "id": "SW-036"
+    "id": "the-prospector"
   },
   {
     "name": "The Ridge at Sun Valley",
@@ -920,7 +920,7 @@
     "confidence": "high",
     "group": "Affordable / Low-cost",
     "also_in": [],
-    "id": "SW-037"
+    "id": "the-ridge-at-sun-valley"
   },
   {
     "name": "Vista Point Apartments",
@@ -944,7 +944,7 @@
     "confidence": "medium",
     "group": "Affordable / Low-cost",
     "also_in": [],
-    "id": "SW-038"
+    "id": "vista-point-apartments"
   },
   {
     "name": "Wedekind Apartments",
@@ -968,7 +968,7 @@
     "confidence": "medium",
     "group": "Affordable / Low-cost",
     "also_in": [],
-    "id": "SW-039"
+    "id": "wedekind-apartments"
   },
   {
     "name": "Zephyr Pointe Apartments",
@@ -994,7 +994,7 @@
     "confidence": "high",
     "group": "Affordable / Low-cost",
     "also_in": [],
-    "id": "SW-040"
+    "id": "zephyr-pointe-apartments"
   },
   {
     "name": "Ala Moana Apartments",
@@ -1019,7 +1019,7 @@
     "confidence": "low",
     "group": "Affordable / Low-cost",
     "also_in": [],
-    "id": "SW-041"
+    "id": "ala-moana-apartments"
   },
   {
     "name": "Arbor Cove at Virginia Lake",
@@ -1045,7 +1045,7 @@
     "confidence": "medium",
     "group": "Affordable / Low-cost",
     "also_in": [],
-    "id": "SW-042"
+    "id": "arbor-cove-at-virginia-lake"
   },
   {
     "name": "Carriage Stone Senior Apartments",
@@ -1069,7 +1069,7 @@
     "confidence": "low",
     "group": "Affordable / Low-cost",
     "also_in": [],
-    "id": "SW-043"
+    "id": "carriage-stone-senior-apartments"
   },
   {
     "name": "Sierra Crest Senior Apartments",
@@ -1093,7 +1093,7 @@
     "confidence": "low",
     "group": "Affordable / Low-cost",
     "also_in": [],
-    "id": "SW-044"
+    "id": "sierra-crest-senior-apartments"
   },
   {
     "name": "Silver Sage Senior Residence",
@@ -1118,7 +1118,7 @@
     "confidence": "low",
     "group": "Affordable / Low-cost",
     "also_in": [],
-    "id": "SW-045"
+    "id": "silver-sage-senior-residence"
   },
   {
     "name": "Silver Sage at Neil Road",
@@ -1142,7 +1142,7 @@
     "confidence": "medium",
     "group": "Affordable / Low-cost",
     "also_in": [],
-    "id": "SW-046"
+    "id": "silver-sage-at-neil-road"
   },
   {
     "name": "Silvercrest Senior Residence",
@@ -1166,7 +1166,7 @@
     "confidence": "low",
     "group": "Affordable / Low-cost",
     "also_in": [],
-    "id": "SW-047"
+    "id": "silvercrest-senior-residence"
   },
   {
     "name": "Sutro Senior Sanctuary",
@@ -1190,7 +1190,7 @@
     "confidence": "medium",
     "group": "Affordable / Low-cost",
     "also_in": [],
-    "id": "SW-048"
+    "id": "sutro-senior-sanctuary"
   },
   {
     "name": "Vintage Hills Senior Apartments",
@@ -1214,7 +1214,7 @@
     "confidence": "medium",
     "group": "Affordable / Low-cost",
     "also_in": [],
-    "id": "SW-049"
+    "id": "vintage-hills-senior-apartments"
   },
   {
     "name": "Vintage at Citi Vista (Citivista Senior Apartments)",
@@ -1239,7 +1239,7 @@
     "confidence": "medium",
     "group": "Affordable / Low-cost",
     "also_in": [],
-    "id": "SW-050"
+    "id": "vintage-at-citi-vista-citivista-senior-apartments"
   },
   {
     "name": "Vintage at Spanish Springs",
@@ -1263,7 +1263,7 @@
     "confidence": "medium",
     "group": "Affordable / Low-cost",
     "also_in": [],
-    "id": "SW-051"
+    "id": "vintage-at-spanish-springs"
   },
   {
     "name": "Vintage at The Crossings",
@@ -1288,7 +1288,7 @@
     "confidence": "medium",
     "group": "Affordable / Low-cost",
     "also_in": [],
-    "id": "SW-052"
+    "id": "vintage-at-the-crossings"
   },
   {
     "name": "Vintage at Washington Station",
@@ -1314,7 +1314,7 @@
     "confidence": "high",
     "group": "Affordable / Low-cost",
     "also_in": [],
-    "id": "SW-053"
+    "id": "vintage-at-washington-station"
   },
   {
     "name": "Community Housing Land Trust (Community Foundation of Northern Nevada)",
@@ -1339,7 +1339,7 @@
     "confidence": "medium",
     "group": "Affordable / Low-cost",
     "also_in": [],
-    "id": "SW-054"
+    "id": "community-housing-land-trust-community-foundation-of-norther"
   },
   {
     "name": "North Reno 712-unit affordable subdivision",
@@ -1363,7 +1363,7 @@
     "confidence": "low",
     "group": "Affordable / Low-cost",
     "also_in": [],
-    "id": "SW-055"
+    "id": "north-reno-712-unit-affordable-subdivision"
   },
   {
     "name": "Truckee Meadows Habitat for Humanity",
@@ -1387,7 +1387,7 @@
     "confidence": "medium",
     "group": "Affordable / Low-cost",
     "also_in": [],
-    "id": "SW-056"
+    "id": "truckee-meadows-habitat-for-humanity"
   },
   {
     "name": "City of Reno / Regional Rental & Deposit Assistance (Nevada Affordable Housing Trust Fund)",
@@ -1412,7 +1412,7 @@
     "confidence": "medium",
     "group": "Affordable / Low-cost",
     "also_in": [],
-    "id": "SW-057"
+    "id": "city-of-reno-regional-rental-deposit-assistance-nevada-affor"
   },
   {
     "name": "Rebuilding Together Northern Nevada - Safe and Healthy Housing Program",
@@ -1436,7 +1436,7 @@
     "confidence": "medium",
     "group": "Affordable / Low-cost",
     "also_in": [],
-    "id": "SW-058"
+    "id": "rebuilding-together-northern-nevada-safe-and-healthy-housing"
   },
   {
     "name": "Washoe County Senior Services (housing referrals)",
@@ -1461,7 +1461,7 @@
     "confidence": "medium",
     "group": "Affordable / Low-cost",
     "also_in": [],
-    "id": "SW-059"
+    "id": "washoe-county-senior-services-housing-referrals"
   },
   {
     "name": "Colony Inn / Colony Studios & Apartments",
@@ -1486,7 +1486,7 @@
     "confidence": "medium",
     "group": "Affordable / Low-cost",
     "also_in": [],
-    "id": "SW-060"
+    "id": "colony-inn-colony-studios-apartments"
   },
   {
     "name": "Freedom House Sober Living",
@@ -1510,7 +1510,7 @@
     "confidence": "medium",
     "group": "Out of scope (asked about)",
     "also_in": [],
-    "id": "SW-061"
+    "id": "freedom-house-sober-living"
   },
   {
     "name": "New Frontier Treatment Center",
@@ -1535,7 +1535,7 @@
     "confidence": "medium",
     "group": "Out of scope (asked about)",
     "also_in": [],
-    "id": "SW-062"
+    "id": "new-frontier-treatment-center"
   },
   {
     "name": "New Hope Recovery Ranch",
@@ -1559,7 +1559,7 @@
     "confidence": "low",
     "group": "Out of scope (asked about)",
     "also_in": [],
-    "id": "SW-063"
+    "id": "new-hope-recovery-ranch"
   },
   {
     "name": "Northern Nevada Veterans Resource Center (SSVF)",
@@ -1584,7 +1584,7 @@
     "confidence": "medium",
     "group": "Out of scope (asked about)",
     "also_in": [],
-    "id": "SW-064"
+    "id": "northern-nevada-veterans-resource-center-ssvf"
   },
   {
     "name": "Restart (Anchor PSH / Rapid Rehousing)",
@@ -1609,7 +1609,7 @@
     "confidence": "medium",
     "group": "Out of scope (asked about)",
     "also_in": [],
-    "id": "SW-065"
+    "id": "restart-anchor-psh-rapid-rehousing"
   },
   {
     "name": "Veterans Guest House",
@@ -1634,7 +1634,7 @@
     "confidence": "high",
     "group": "Out of scope (asked about)",
     "also_in": [],
-    "id": "SW-066"
+    "id": "veterans-guest-house"
   },
   {
     "name": "HOPWA / Northern Nevada HOPES housing assistance",
@@ -1657,7 +1657,7 @@
     "confidence": "low",
     "group": "PSH / Public / HUD",
     "also_in": [],
-    "id": "SW-067"
+    "id": "hopwa-northern-nevada-hopes-housing-assistance"
   },
   {
     "name": "Carville Park Apartments",
@@ -1687,7 +1687,7 @@
     "also_in": [
       "Affordable / Low-cost"
     ],
-    "id": "SW-068"
+    "id": "carville-park-apartments"
   },
   {
     "name": "Centennial Park Annex",
@@ -1714,7 +1714,7 @@
     "also_in": [
       "Affordable / Low-cost"
     ],
-    "id": "SW-069"
+    "id": "centennial-park-annex"
   },
   {
     "name": "Golden I Apartments (Golden Apartments)",
@@ -1741,7 +1741,7 @@
     "confidence": "medium",
     "group": "PSH / Public / HUD",
     "also_in": [],
-    "id": "SW-070"
+    "id": "golden-i-apartments-golden-apartments"
   },
   {
     "name": "Pilgrims Rest (project-based)",
@@ -1765,7 +1765,7 @@
     "confidence": "medium",
     "group": "PSH / Public / HUD",
     "also_in": [],
-    "id": "SW-071"
+    "id": "pilgrims-rest-project-based"
   },
   {
     "name": "Washoe Mill Apartments",
@@ -1796,7 +1796,7 @@
     "also_in": [
       "Affordable / Low-cost"
     ],
-    "id": "SW-072"
+    "id": "washoe-mill-apartments"
   },
   {
     "name": "Carville Court",
@@ -1826,7 +1826,7 @@
     "also_in": [
       "Out of scope (asked about)"
     ],
-    "id": "SW-073"
+    "id": "carville-court"
   },
   {
     "name": "Catholic Charities of Northern Nevada - PSH intake",
@@ -1849,7 +1849,7 @@
     "confidence": "low",
     "group": "PSH / Public / HUD",
     "also_in": [],
-    "id": "SW-074"
+    "id": "catholic-charities-of-northern-nevada-psh-intake"
   },
   {
     "name": "Dick Scott Manor",
@@ -1874,7 +1874,7 @@
     "confidence": "high",
     "group": "PSH / Public / HUD",
     "also_in": [],
-    "id": "SW-075"
+    "id": "dick-scott-manor"
   },
   {
     "name": "Hi-Way 40 (Highway 40) supportive housing",
@@ -1900,7 +1900,7 @@
     "confidence": "medium",
     "group": "PSH / Public / HUD",
     "also_in": [],
-    "id": "SW-076"
+    "id": "hi-way-40-highway-40-supportive-housing"
   },
   {
     "name": "Hope Landing",
@@ -1927,7 +1927,7 @@
     "confidence": "medium",
     "group": "PSH / Public / HUD",
     "also_in": [],
-    "id": "SW-077"
+    "id": "hope-landing"
   },
   {
     "name": "Line Drive Apartments",
@@ -1956,7 +1956,7 @@
     "also_in": [
       "Affordable / Low-cost"
     ],
-    "id": "SW-078"
+    "id": "line-drive-apartments"
   },
   {
     "name": "Nevada Cares Campus Permanent Supportive Housing",
@@ -1982,7 +1982,7 @@
     "confidence": "high",
     "group": "PSH / Public / HUD",
     "also_in": [],
-    "id": "SW-079"
+    "id": "nevada-cares-campus-permanent-supportive-housing"
   },
   {
     "name": "Our Place (Washoe County) - PSH component",
@@ -2005,7 +2005,7 @@
     "confidence": "low",
     "group": "PSH / Public / HUD",
     "also_in": [],
-    "id": "SW-080"
+    "id": "our-place-washoe-county-psh-component"
   },
   {
     "name": "Essex Manor",
@@ -2032,7 +2032,7 @@
     "confidence": "medium",
     "group": "PSH / Public / HUD",
     "also_in": [],
-    "id": "SW-081"
+    "id": "essex-manor"
   },
   {
     "name": "John McGraw Court",
@@ -2059,7 +2059,7 @@
     "confidence": "medium",
     "group": "PSH / Public / HUD",
     "also_in": [],
-    "id": "SW-082"
+    "id": "john-mcgraw-court"
   },
   {
     "name": "Mineral Manor",
@@ -2086,7 +2086,7 @@
     "confidence": "medium",
     "group": "PSH / Public / HUD",
     "also_in": [],
-    "id": "SW-083"
+    "id": "mineral-manor"
   },
   {
     "name": "Myra Birch Manor",
@@ -2112,7 +2112,7 @@
     "confidence": "medium",
     "group": "PSH / Public / HUD",
     "also_in": [],
-    "id": "SW-084"
+    "id": "myra-birch-manor"
   },
   {
     "name": "RHA Public Housing & Project-Based Assistance waitlists",
@@ -2137,7 +2137,7 @@
     "confidence": "high",
     "group": "PSH / Public / HUD",
     "also_in": [],
-    "id": "SW-085"
+    "id": "rha-public-housing-project-based-assistance-waitlists"
   },
   {
     "name": "RHA Reno Avenue development",
@@ -2162,7 +2162,7 @@
     "confidence": "medium",
     "group": "PSH / Public / HUD",
     "also_in": [],
-    "id": "SW-086"
+    "id": "rha-reno-avenue-development"
   },
   {
     "name": "Silver Sage Court",
@@ -2187,7 +2187,7 @@
     "confidence": "medium",
     "group": "PSH / Public / HUD",
     "also_in": [],
-    "id": "SW-087"
+    "id": "silver-sage-court"
   },
   {
     "name": "Silverada Manor",
@@ -2212,7 +2212,7 @@
     "confidence": "medium",
     "group": "PSH / Public / HUD",
     "also_in": [],
-    "id": "SW-088"
+    "id": "silverada-manor"
   },
   {
     "name": "Stead Manor",
@@ -2239,7 +2239,7 @@
     "confidence": "medium",
     "group": "PSH / Public / HUD",
     "also_in": [],
-    "id": "SW-089"
+    "id": "stead-manor"
   },
   {
     "name": "The Village at Hawk View (Hawk View Apartments redevelopment)",
@@ -2267,7 +2267,7 @@
     "confidence": "medium",
     "group": "PSH / Public / HUD",
     "also_in": [],
-    "id": "SW-090",
+    "id": "the-village-at-hawk-view-hawk-view-apartments-redevelopment",
     "ami_limits": "20-80% AMI"
   },
   {
@@ -2294,7 +2294,7 @@
     "confidence": "medium",
     "group": "PSH / Public / HUD",
     "also_in": [],
-    "id": "SW-091"
+    "id": "tom-sawyer-village"
   },
   {
     "name": "Willie J. Wynn Apartments",
@@ -2322,7 +2322,7 @@
     "also_in": [
       "Affordable / Low-cost"
     ],
-    "id": "SW-092"
+    "id": "willie-j-wynn-apartments"
   },
   {
     "name": "Yorkshire Terrace",
@@ -2346,7 +2346,7 @@
     "confidence": "low",
     "group": "PSH / Public / HUD",
     "also_in": [],
-    "id": "SW-093"
+    "id": "yorkshire-terrace"
   },
   {
     "name": "Washoe County rapid rehousing / housing navigation via Coordinated Entry",
@@ -2371,7 +2371,7 @@
     "confidence": "low",
     "group": "PSH / Public / HUD",
     "also_in": [],
-    "id": "SW-094"
+    "id": "washoe-county-rapid-rehousing-housing-navigation-via-coordin"
   },
   {
     "name": "Metropolitan Gardens Apartments",
@@ -2396,7 +2396,7 @@
     "confidence": "medium",
     "group": "PSH / Public / HUD",
     "also_in": [],
-    "id": "SW-095"
+    "id": "metropolitan-gardens-apartments"
   },
   {
     "name": "Reno Silvercrest Residence",
@@ -2421,7 +2421,7 @@
     "confidence": "medium",
     "group": "PSH / Public / HUD",
     "also_in": [],
-    "id": "SW-096"
+    "id": "reno-silvercrest-residence"
   },
   {
     "name": "Sierra Manor I & II",
@@ -2454,7 +2454,7 @@
       "Out of scope (asked about)"
     ],
     "waitlist_status": "Unconfirmed (aggregators conflict)",
-    "id": "SW-097"
+    "id": "sierra-manor-i-ii"
   },
   {
     "name": "John Butterworth Estates",
@@ -2479,7 +2479,7 @@
     "confidence": "medium",
     "group": "PSH / Public / HUD",
     "also_in": [],
-    "id": "SW-098"
+    "id": "john-butterworth-estates"
   },
   {
     "name": "Nevada Section 811 Project Rental Assistance (PRA)",
@@ -2502,7 +2502,7 @@
     "confidence": "medium",
     "group": "PSH / Public / HUD",
     "also_in": [],
-    "id": "SW-099"
+    "id": "nevada-section-811-project-rental-assistance-pra"
   },
   {
     "name": "William J. Raggio Plaza",
@@ -2531,7 +2531,7 @@
     "also_in": [
       "Affordable / Low-cost"
     ],
-    "id": "SW-100"
+    "id": "william-j-raggio-plaza"
   },
   {
     "name": "Emergency Housing Vouchers (EHV) - RHA",
@@ -2557,7 +2557,7 @@
     "confidence": "high",
     "group": "PSH / Public / HUD",
     "also_in": [],
-    "id": "SW-101"
+    "id": "emergency-housing-vouchers-ehv-rha"
   },
   {
     "name": "Foster Youth to Independence (FYI) / foster youth vouchers - RHA",
@@ -2581,7 +2581,7 @@
     "confidence": "medium",
     "group": "PSH / Public / HUD",
     "also_in": [],
-    "id": "SW-102"
+    "id": "foster-youth-to-independence-fyi-foster-youth-vouchers-rha"
   },
   {
     "name": "HUD-VASH (Veterans Affairs Supportive Housing) - RHA",
@@ -2606,7 +2606,7 @@
     "confidence": "high",
     "group": "PSH / Public / HUD",
     "also_in": [],
-    "id": "SW-103"
+    "id": "hud-vash-veterans-affairs-supportive-housing-rha"
   },
   {
     "name": "Housing Choice Voucher (Section 8) - Reno Housing Authority",
@@ -2633,7 +2633,7 @@
     "confidence": "high",
     "group": "PSH / Public / HUD",
     "also_in": [],
-    "id": "SW-104"
+    "id": "housing-choice-voucher-section-8-reno-housing-authority"
   },
   {
     "name": "RHA Project-Based Vouchers (special populations)",
@@ -2657,7 +2657,7 @@
     "confidence": "medium",
     "group": "PSH / Public / HUD",
     "also_in": [],
-    "id": "SW-105"
+    "id": "rha-project-based-vouchers-special-populations"
   },
   {
     "name": "Domestic Violence Resource Center (DVRC) Emergency Shelter",
@@ -2681,7 +2681,7 @@
     "confidence": "medium",
     "group": "Shelter",
     "also_in": [],
-    "id": "SW-106"
+    "id": "domestic-violence-resource-center-dvrc-emergency-shelter"
   },
   {
     "name": "Inter-Tribal Council of Nevada Family Violence Prevention Shelter",
@@ -2704,7 +2704,7 @@
     "confidence": "medium",
     "group": "Shelter",
     "also_in": [],
-    "id": "SW-107"
+    "id": "inter-tribal-council-of-nevada-family-violence-prevention-sh"
   },
   {
     "name": "Safe Embrace",
@@ -2729,7 +2729,7 @@
     "confidence": "medium",
     "group": "Shelter",
     "also_in": [],
-    "id": "SW-108"
+    "id": "safe-embrace"
   },
   {
     "name": "Nevada Cares Campus Emergency Shelter",
@@ -2757,7 +2757,7 @@
     "confidence": "high",
     "group": "Shelter",
     "also_in": [],
-    "id": "SW-109"
+    "id": "nevada-cares-campus-emergency-shelter"
   },
   {
     "name": "Reno-Sparks Gospel Mission Women's Emergency Shelter",
@@ -2781,7 +2781,7 @@
     "confidence": "low",
     "group": "Shelter",
     "also_in": [],
-    "id": "SW-110"
+    "id": "reno-sparks-gospel-mission-women-s-emergency-shelter"
   },
   {
     "name": "Salvation Army Reno",
@@ -2805,7 +2805,7 @@
     "confidence": "low",
     "group": "Shelter",
     "also_in": [],
-    "id": "SW-111"
+    "id": "salvation-army-reno"
   },
   {
     "name": "Washoe County CrossRoads (Men's, Women's, Women & Children's)",
@@ -2829,7 +2829,7 @@
     "confidence": "medium",
     "group": "Shelter",
     "also_in": [],
-    "id": "SW-112"
+    "id": "washoe-county-crossroads-men-s-women-s-women-children-s"
   },
   {
     "name": "Family Promise of Reno-Sparks (Northern Nevada)",
@@ -2851,7 +2851,7 @@
     "confidence": "low",
     "group": "Shelter",
     "also_in": [],
-    "id": "SW-113"
+    "id": "family-promise-of-reno-sparks-northern-nevada"
   },
   {
     "name": "Our Place (Women's Shelter & Family Shelter)",
@@ -2884,7 +2884,7 @@
     ],
     "length_of_stay": "stays extended to up to six months (per reporting)",
     "cost": "free",
-    "id": "SW-114"
+    "id": "our-place-women-s-shelter-family-shelter"
   },
   {
     "name": "Reno Housing Authority HPP Motel Assistance",
@@ -2907,7 +2907,7 @@
     "confidence": "high",
     "group": "Shelter",
     "also_in": [],
-    "id": "SW-115"
+    "id": "reno-housing-authority-hpp-motel-assistance"
   },
   {
     "name": "Nevada Cares Campus Safe Camp",
@@ -2932,7 +2932,7 @@
     "confidence": "medium",
     "group": "Shelter",
     "also_in": [],
-    "id": "SW-116"
+    "id": "nevada-cares-campus-safe-camp"
   },
   {
     "name": "Our Place Safe Parking Pilot",
@@ -2955,7 +2955,7 @@
     "confidence": "medium",
     "group": "Shelter",
     "also_in": [],
-    "id": "SW-117"
+    "id": "our-place-safe-parking-pilot"
   },
   {
     "name": "American Red Cross Hawk Fire Evacuation Shelter",
@@ -2978,7 +2978,7 @@
     "confidence": "medium",
     "group": "Shelter",
     "also_in": [],
-    "id": "SW-118"
+    "id": "american-red-cross-hawk-fire-evacuation-shelter"
   },
   {
     "name": "Good Neighbors Warming Center",
@@ -3003,7 +3003,7 @@
     "confidence": "medium",
     "group": "Shelter",
     "also_in": [],
-    "id": "SW-119"
+    "id": "good-neighbors-warming-center"
   },
   {
     "name": "Nevada Cares Campus Resource Center / Warming & Cooling Center",
@@ -3028,7 +3028,7 @@
     "confidence": "medium",
     "group": "Shelter",
     "also_in": [],
-    "id": "SW-120"
+    "id": "nevada-cares-campus-resource-center-warming-cooling-center"
   },
   {
     "name": "Reno-Sparks Gospel Mission Men's Cold Weather Emergency Shelter",
@@ -3051,7 +3051,7 @@
     "confidence": "low",
     "group": "Shelter",
     "also_in": [],
-    "id": "SW-121"
+    "id": "reno-sparks-gospel-mission-men-s-cold-weather-emergency-shel"
   },
   {
     "name": "Washoe County Winter Overflow (Nevada Cares Campus & Our Place)",
@@ -3075,7 +3075,7 @@
     "confidence": "medium",
     "group": "Shelter",
     "also_in": [],
-    "id": "SW-122"
+    "id": "washoe-county-winter-overflow-nevada-cares-campus-our-place"
   },
   {
     "name": "Children's Cabinet Safe Place (runaway/homeless youth crisis shelter)",
@@ -3099,7 +3099,7 @@
     "confidence": "medium",
     "group": "Shelter",
     "also_in": [],
-    "id": "SW-123"
+    "id": "children-s-cabinet-safe-place-runaway-homeless-youth-crisis"
   },
   {
     "name": "Eddy House (24-hour youth shelter & drop-in)",
@@ -3124,7 +3124,7 @@
     "confidence": "medium",
     "group": "Shelter",
     "also_in": [],
-    "id": "SW-124"
+    "id": "eddy-house-24-hour-youth-shelter-drop-in"
   },
   {
     "name": "Kids Kottage",
@@ -3147,7 +3147,7 @@
     "confidence": "medium",
     "group": "Shelter",
     "also_in": [],
-    "id": "SW-125"
+    "id": "kids-kottage"
   },
   {
     "name": "Hope Springs",
@@ -3175,7 +3175,7 @@
     "confidence": "high",
     "group": "Transitional / Recovery",
     "also_in": [],
-    "id": "SW-126"
+    "id": "hope-springs"
   },
   {
     "name": "The Village on Sage Street",
@@ -3212,7 +3212,7 @@
     "waitlist_status": "City memo: consistently full with a queue of eligible applicants",
     "ami_limits": "monthly income $1,320-$2,735 (original criteria)",
     "typical_rent": "$400/mo incl. utilities + $400 deposit (launch-era rate; verify)",
-    "id": "SW-127"
+    "id": "the-village-on-sage-street"
   },
   {
     "name": "Battle Born Housing Plus (St. Vincent's Residences)",
@@ -3240,7 +3240,7 @@
     "confidence": "medium",
     "group": "Transitional / Recovery",
     "also_in": [],
-    "id": "SW-128"
+    "id": "battle-born-housing-plus-st-vincent-s-residences"
   },
   {
     "name": "Bristlecone Family Resources - GATE Transitional Living",
@@ -3267,7 +3267,7 @@
     "confidence": "medium",
     "group": "Transitional / Recovery",
     "also_in": [],
-    "id": "SW-129"
+    "id": "bristlecone-family-resources-gate-transitional-living"
   },
   {
     "name": "CrossRoads - Men's Supportive Community (Main Campus)",
@@ -3296,7 +3296,7 @@
     "confidence": "medium",
     "group": "Transitional / Recovery",
     "also_in": [],
-    "id": "SW-130"
+    "id": "crossroads-men-s-supportive-community-main-campus"
   },
   {
     "name": "CrossRoads - Women's Program (River House & Serenity homes)",
@@ -3323,7 +3323,7 @@
     "confidence": "high",
     "group": "Transitional / Recovery",
     "also_in": [],
-    "id": "SW-131"
+    "id": "crossroads-women-s-program-river-house-serenity-homes"
   },
   {
     "name": "Life Changes, Inc. Sober Homes",
@@ -3349,7 +3349,7 @@
     "confidence": "medium",
     "group": "Transitional / Recovery",
     "also_in": [],
-    "id": "SW-132"
+    "id": "life-changes-inc-sober-homes"
   },
   {
     "name": "Pathway Program",
@@ -3373,7 +3373,7 @@
     "confidence": "low",
     "group": "Transitional / Recovery",
     "also_in": [],
-    "id": "SW-133"
+    "id": "pathway-program"
   },
   {
     "name": "Recovery Road (women's sober living)",
@@ -3397,7 +3397,7 @@
     "confidence": "low",
     "group": "Transitional / Recovery",
     "also_in": [],
-    "id": "SW-134"
+    "id": "recovery-road-women-s-sober-living"
   },
   {
     "name": "Reno-Sparks Gospel Mission - Men's Long-Term Recovery Program",
@@ -3423,7 +3423,7 @@
     "confidence": "medium",
     "group": "Transitional / Recovery",
     "also_in": [],
-    "id": "SW-135"
+    "id": "reno-sparks-gospel-mission-men-s-long-term-recovery-program"
   },
   {
     "name": "Reno-Sparks Gospel Mission - Women's Long-Term Recovery Program",
@@ -3448,7 +3448,7 @@
     "confidence": "medium",
     "group": "Transitional / Recovery",
     "also_in": [],
-    "id": "SW-136"
+    "id": "reno-sparks-gospel-mission-women-s-long-term-recovery-progra"
   },
   {
     "name": "STEP2 Lighthouse Campus Transitional Housing",
@@ -3475,7 +3475,7 @@
     "confidence": "medium",
     "group": "Transitional / Recovery",
     "also_in": [],
-    "id": "SW-137"
+    "id": "step2-lighthouse-campus-transitional-housing"
   },
   {
     "name": "Salvation Army Reno Rehabilitation Program",
@@ -3499,7 +3499,7 @@
     "confidence": "medium",
     "group": "Transitional / Recovery",
     "also_in": [],
-    "id": "SW-138"
+    "id": "salvation-army-reno-rehabilitation-program"
   },
   {
     "name": "The Empowerment Center / The Launching Pad",
@@ -3527,7 +3527,7 @@
     "confidence": "medium",
     "group": "Transitional / Recovery",
     "also_in": [],
-    "id": "SW-139"
+    "id": "the-empowerment-center-the-launching-pad"
   },
   {
     "name": "The Life Change Center - Renewal (women) / ReNew (men) transitional housing",
@@ -3553,7 +3553,7 @@
     "confidence": "low",
     "group": "Transitional / Recovery",
     "also_in": [],
-    "id": "SW-140"
+    "id": "the-life-change-center-renewal-women-renew-men-transitional"
   },
   {
     "name": "Well Care - Men's CrossRoads housing contract (likely 'Welcare housing')",
@@ -3580,7 +3580,7 @@
     "confidence": "medium",
     "group": "Transitional / Recovery",
     "also_in": [],
-    "id": "SW-141"
+    "id": "well-care-men-s-crossroads-housing-contract-likely-welcare-h"
   },
   {
     "name": "Welvida / SoberHomes Reno",
@@ -3604,7 +3604,7 @@
     "confidence": "low",
     "group": "Transitional / Recovery",
     "also_in": [],
-    "id": "SW-142"
+    "id": "welvida-soberhomes-reno"
   },
   {
     "name": "Northern Nevada Transitional Housing (NNTH)",
@@ -3629,7 +3629,7 @@
     "confidence": "high",
     "group": "Transitional / Recovery",
     "also_in": [],
-    "id": "SW-143"
+    "id": "northern-nevada-transitional-housing-nnth"
   },
   {
     "name": "Ridge House - Men's Residential Homes",
@@ -3657,7 +3657,7 @@
     "confidence": "medium",
     "group": "Transitional / Recovery",
     "also_in": [],
-    "id": "SW-144"
+    "id": "ridge-house-men-s-residential-homes"
   },
   {
     "name": "Ridge House - Women's Home",
@@ -3681,7 +3681,7 @@
     "confidence": "medium",
     "group": "Transitional / Recovery",
     "also_in": [],
-    "id": "SW-145"
+    "id": "ridge-house-women-s-home"
   },
   {
     "name": "Step 1, Inc.",
@@ -3708,7 +3708,7 @@
     "confidence": "medium",
     "group": "Transitional / Recovery",
     "also_in": [],
-    "id": "SW-146"
+    "id": "step-1-inc"
   },
   {
     "name": "Awaken Housing Program",
@@ -3735,7 +3735,7 @@
     "confidence": "medium",
     "group": "Transitional / Recovery",
     "also_in": [],
-    "id": "SW-147"
+    "id": "awaken-housing-program"
   },
   {
     "name": "CAAW Transitional Housing Program",
@@ -3760,7 +3760,7 @@
     "confidence": "low",
     "group": "Transitional / Recovery",
     "also_in": [],
-    "id": "SW-148"
+    "id": "caaw-transitional-housing-program"
   },
   {
     "name": "Casa de Vida (maternity home & House of Hope)",
@@ -3786,7 +3786,7 @@
     "confidence": "medium",
     "group": "Transitional / Recovery",
     "also_in": [],
-    "id": "SW-149"
+    "id": "casa-de-vida-maternity-home-house-of-hope"
   },
   {
     "name": "CrossRoads - Women with Children and Families",
@@ -3811,7 +3811,7 @@
     "confidence": "medium",
     "group": "Transitional / Recovery",
     "also_in": [],
-    "id": "SW-150"
+    "id": "crossroads-women-with-children-and-families"
   },
   {
     "name": "Faith-based men's transitional home (1912 Wilder St)",
@@ -3835,7 +3835,7 @@
     "confidence": "low",
     "group": "Transitional / Recovery",
     "also_in": [],
-    "id": "SW-151"
+    "id": "faith-based-men-s-transitional-home-1912-wilder-st"
   },
   {
     "name": "Hosanna Home",
@@ -3862,7 +3862,7 @@
     "confidence": "medium",
     "group": "Transitional / Recovery",
     "also_in": [],
-    "id": "SW-152"
+    "id": "hosanna-home"
   },
   {
     "name": "Safe Embrace Transitional Housing",
@@ -3887,7 +3887,7 @@
     "confidence": "medium",
     "group": "Transitional / Recovery",
     "also_in": [],
-    "id": "SW-153"
+    "id": "safe-embrace-transitional-housing"
   },
   {
     "name": "Second Chances Transitional Housing for Women",
@@ -3912,7 +3912,7 @@
     "confidence": "low",
     "group": "Transitional / Recovery",
     "also_in": [],
-    "id": "SW-154"
+    "id": "second-chances-transitional-housing-for-women"
   },
   {
     "name": "Vincent's Transitional Center (St. Vincent's)",
@@ -3937,7 +3937,7 @@
     "confidence": "low",
     "group": "Transitional / Recovery",
     "also_in": [],
-    "id": "SW-155"
+    "id": "vincent-s-transitional-center-st-vincent-s"
   },
   {
     "name": "CrossRoads Park House (veteran beds)",
@@ -3962,7 +3962,7 @@
     "confidence": "low",
     "group": "Transitional / Recovery",
     "also_in": [],
-    "id": "SW-156"
+    "id": "crossroads-park-house-veteran-beds"
   },
   {
     "name": "Ridge House - Veterans Home",
@@ -3987,7 +3987,7 @@
     "confidence": "medium",
     "group": "Transitional / Recovery",
     "also_in": [],
-    "id": "SW-157"
+    "id": "ridge-house-veterans-home"
   },
   {
     "name": "VOA Veteran Transitional Housing at Nevada Cares Campus",
@@ -4012,7 +4012,7 @@
     "confidence": "low",
     "group": "Transitional / Recovery",
     "also_in": [],
-    "id": "SW-158"
+    "id": "voa-veteran-transitional-housing-at-nevada-cares-campus"
   },
   {
     "name": "Vitality Veterans Program (Vitality Veteran Housing)",
@@ -4038,7 +4038,7 @@
     "confidence": "low",
     "group": "Transitional / Recovery",
     "also_in": [],
-    "id": "SW-159"
+    "id": "vitality-veterans-program-vitality-veteran-housing"
   },
   {
     "name": "WestCare Reno Homefront Veterans' Transitional Living",
@@ -4066,7 +4066,7 @@
     "confidence": "medium",
     "group": "Transitional / Recovery",
     "also_in": [],
-    "id": "SW-160"
+    "id": "westcare-reno-homefront-veterans-transitional-living"
   },
   {
     "name": "Eddy House Transitional Living Community (TLC 36) & Community Living",
@@ -4093,6 +4093,6 @@
     "confidence": "medium",
     "group": "Transitional / Recovery",
     "also_in": [],
-    "id": "SW-161"
+    "id": "eddy-house-transitional-living-community-tlc-36-community-li"
   }
 ]

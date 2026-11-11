@@ -1,0 +1,41 @@
+rules_version = '2';
+
+// Shelter Watch comments — "post now, flag later".
+// Merge this block into the project's existing rules; do not replace them.
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /shelterwatch_comments/{commentId} {
+
+      // Only public comments can be read. Held/removed comments are visible
+      // to moderators in the Firebase console only.
+      allow read: if resource.data.status in ['visible', 'approved'];
+
+      allow create: if request.auth != null
+        && request.resource.data.authorUid == request.auth.uid
+        && request.resource.data.keys().hasOnly([
+             'facilityId', 'text', 'relationship', 'ratings', 'facts',
+             'status', 'heldReasons', 'reports', 'createdAt', 'authorUid'])
+        && request.resource.data.facilityId is string
+        && request.resource.data.text is string
+        && request.resource.data.text.size() >= 10
+        && request.resource.data.text.size() <= 3000
+        && request.resource.data.relationship in [
+             'current_resident', 'former_resident', 'staff',
+             'family_or_friend', 'service_provider', 'other']
+        && request.resource.data.ratings is map
+        && request.resource.data.facts is map
+        && request.resource.data.status in ['visible', 'held']
+        && request.resource.data.reports == [];
+
+      // Reporting: a signed-in user may add only their own id to `reports`, once.
+      allow update: if request.auth != null
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['reports'])
+        && !(request.auth.uid in resource.data.reports)
+        && request.resource.data.reports.size() == resource.data.reports.size() + 1
+        && request.auth.uid in request.resource.data.reports;
+
+      // Moderators approve/remove with the Firebase console or Admin SDK.
+      allow delete: if false;
+    }
+  }
+}

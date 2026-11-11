@@ -31,7 +31,14 @@ for f, group in files.items():
             r['also_in'] = []
             merged[k] = r
 rows = sorted(merged.values(), key=lambda r:(r['group'], r.get('category') or '', r['name']))
-for i,r in enumerate(rows,1): r['id'] = f'SW-{i:03d}'
+def assign_ids(rows):
+    # Stable IDs: slug of the name. Reviews are keyed by this ID, so never renumber.
+    seen = {}
+    for r in rows:
+        base = re.sub(r'[^a-z0-9]+', '-', r['name'].lower()).strip('-')[:60].strip('-')
+        seen[base] = seen.get(base, 0) + 1
+        r['id'] = base if seen[base] == 1 else f"{base}-{seen[base]}"
+assign_ids(rows)
 json.dump(rows, open(os.path.join(out,'housing_master.json'),'w'), indent=2)
 cols = ['id','group','category','name','operator','population','address','city','phone','website','how_to_apply','units','status','waitlist_status','typical_rent','ami_limits','cost','length_of_stay','funding','confidence','notes','also_in','sources']
 with open(os.path.join(out,'housing_master.csv'),'w',newline='') as fh:
@@ -56,7 +63,7 @@ for d,k in pairs:
 hl = by.get('Hope Landing'); 
 if hl: hl['notes'] = (hl.get('notes') or '') + ' | LIKELY SAME PROJECT as Carville Court redevelopment (1245-1257 Carville Dr) - verify with RHA.'
 rows = sorted(by.values(), key=lambda r:(r['group'], r.get('category') or '', r['name']))
-for i,r in enumerate(rows,1): r['id'] = f'SW-{i:03d}'
+assign_ids(rows)
 json.dump(rows, open(os.path.join(out,'housing_master.json'),'w'), indent=2)
 with open(os.path.join(out,'housing_master.csv'),'w',newline='') as fh:
     w = csv.DictWriter(fh, fieldnames=cols, extrasaction='ignore'); w.writeheader()

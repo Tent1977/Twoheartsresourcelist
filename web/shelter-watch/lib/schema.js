@@ -1,0 +1,123 @@
+/**
+ * Shelter Watch — facility profile schema.
+ *
+ * Every fact about a facility is stored as three separate claims so the
+ * fact checker can compare them side by side:
+ *   - establishment: what the operator says (website, flyer, phone call)
+ *   - verified:      what an independent source shows (inspection, document, site visit)
+ *   - residents:     derived at runtime from resident comments (never stored here)
+ *
+ * Works in Node (require) and the browser (window.ShelterWatch.schema).
+ */
+(function (root, factory) {
+  const mod = factory();
+  if (typeof module === 'object' && module.exports) module.exports = mod;
+  else (root.ShelterWatch = root.ShelterWatch || {}).schema = mod;
+})(typeof self !== 'undefined' ? self : this, function () {
+  /** Resident rating dimensions, each scored 1–5. */
+  const DIMENSIONS = [
+    { key: 'happy', label: 'Happy place to live' },
+    { key: 'comfortable', label: 'Comfortable' },
+    { key: 'affordable', label: 'Affordable' },
+    { key: 'residentsFirst', label: 'Puts residents’ needs first' },
+    { key: 'clean', label: 'Clean' },
+    { key: 'safe', label: 'Feels safe' },
+    { key: 'rulesFair', label: 'Rules are fair' },
+    { key: 'privacy', label: 'Privacy' },
+    { key: 'staff', label: 'Support staff demeanor' },
+    { key: 'management', label: 'Management demeanor' },
+    { key: 'recommend', label: 'Would recommend' },
+  ];
+
+  /**
+   * Facts that can be checked. `options` lists allowed values; residents
+   * pick from the same options so their answers can be compared.
+   */
+  const FACTS = [
+    { key: 'petsAllowed', label: 'Pets allowed', options: ['yes', 'no', 'service_animals_only'] },
+    { key: 'petRequirements', label: 'Pet requirements', options: null },
+    { key: 'visitorsAllowed', label: 'Visitors allowed', options: ['yes', 'no', 'restricted'] },
+    { key: 'visitorHours', label: 'Visitor hours', options: null },
+    { key: 'rulesLevel', label: 'Amount of rules', options: ['few', 'moderate', 'many'] },
+    { key: 'kitchen', label: 'Kitchen', options: ['individual', 'communal', 'both', 'none'] },
+    { key: 'bathroom', label: 'Bathroom', options: ['private', 'communal', 'both'] },
+    { key: 'furnished', label: 'Furnished', options: ['yes', 'no', 'partial'] },
+    { key: 'staffOnSite', label: 'Support staff on site', options: ['24_7', 'business_hours', 'some', 'none'] },
+    { key: 'staffCount', label: 'Number of support staff', options: null },
+    { key: 'peerSupport', label: 'Peer support staff', options: ['yes', 'no'] },
+    { key: 'traumaInformed', label: 'Staff trained in trauma-informed care', options: ['yes', 'no'] },
+    { key: 'harmReduction', label: 'Harm reduction approach', options: ['yes', 'no'] },
+    { key: 'events', label: 'Holds events / activities', options: ['yes', 'no'] },
+    { key: 'acceptsRegistrants', label: 'Accepts people on the sex offender registry', options: ['yes', 'no', 'case_by_case'] },
+    { key: 'menWomenRatio', label: 'Men to women ratio', options: null },
+  ];
+
+  /** Facts residents may report in a comment (subset with fixed options). */
+  const RESIDENT_REPORTABLE = FACTS.filter((f) => Array.isArray(f.options)).map((f) => f.key);
+
+  const DIMENSION_KEYS = DIMENSIONS.map((d) => d.key);
+  const FACT_KEYS = FACTS.map((f) => f.key);
+
+  /** Categories whose street address must never be shown. */
+  const CONFIDENTIAL_CATEGORIES = ['dv_shelter'];
+
+  function emptyFacts() {
+    const facts = {};
+    FACT_KEYS.forEach((k) => {
+      facts[k] = { establishment: null, verified: null };
+    });
+    return facts;
+  }
+
+  function isConfidential(record) {
+    if (!record) return false;
+    if (CONFIDENTIAL_CATEGORIES.includes(record.category)) return true;
+    return typeof record.address === 'string' && /confidential/i.test(record.address);
+  }
+
+  /**
+   * Turn a research record (data/shelter-watch/housing_master.json) into a
+   * public facility profile. Never infers facts the research didn't state.
+   */
+  function toFacility(record) {
+    if (!record || !record.id || !record.name) throw new Error('Record needs id and name');
+    const confidential = isConfidential(record);
+    return {
+      id: record.id,
+      name: record.name,
+      group: record.group || null,
+      category: record.category || null,
+      operator: record.operator || null,
+      population: record.population || null,
+      address: confidential ? 'Confidential — call for intake' : record.address || null,
+      city: record.city || null,
+      phone: record.phone || null,
+      website: record.website || null,
+      howToApply: record.how_to_apply || null,
+      units: record.units == null ? null : record.units,
+      status: record.status || null,
+      waitlist: record.waitlist_status || null,
+      rent: record.typical_rent || record.cost || null,
+      funding: record.funding || null,
+      researchConfidence: record.confidence || 'low',
+      researchNotes: record.notes || null,
+      sources: Array.isArray(record.sources) ? record.sources : [],
+      confidential,
+      establishmentAskedAt: null, // set when Shelter Watch requests facts from the operator
+      leadership: [],
+      facts: emptyFacts(),
+    };
+  }
+
+  return {
+    DIMENSIONS,
+    DIMENSION_KEYS,
+    FACTS,
+    FACT_KEYS,
+    RESIDENT_REPORTABLE,
+    CONFIDENTIAL_CATEGORIES,
+    emptyFacts,
+    isConfidential,
+    toFacility,
+  };
+});
