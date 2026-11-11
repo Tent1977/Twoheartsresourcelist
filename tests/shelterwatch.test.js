@@ -37,8 +37,8 @@ describe('schema', () => {
 
   test('confidential sites hide address, notes, sources, units and street names', () => {
     const f = facility({
-      category: 'dv_shelter', address: '123 Real St', notes: 'near [location withheld]', sources: ['https://news/x'],
-      units: 'new facility', how_to_apply: 'Go to 50 Oak Ave', population: 'survivors',
+      category: 'dv_shelter', address: '123 Real St', notes: 'near 1200 Example St', sources: ['https://news/x'],
+      units: 'new Example St facility', how_to_apply: 'Go to 50 Oak Ave', population: 'survivors',
     });
     expect(f.address).toMatch(/Confidential/);
     expect(f).toMatchObject({ researchNotes: null, sources: [], units: null, confidential: true });
@@ -111,7 +111,7 @@ describe('moderation screen', () => {
   test('confidential sites always go to a moderator and flag locations', () => {
     expect(moderation.screen('Nice staff and clean rooms', { confidential: true }).status).toBe('held');
     expect(moderation.screen('it is at 123 n virginia st', { confidential: true }).reasons).toContain('Mentions a location on a confidential site');
-    expect(moderation.screen('on [location withheld] near Kietzke', { confidential: true }).reasons).toContain('Mentions a location on a confidential site');
+    expect(moderation.screen('on Maple near Oakdale', { confidential: true }).reasons).toContain('Mentions a location on a confidential site');
   });
 });
 
