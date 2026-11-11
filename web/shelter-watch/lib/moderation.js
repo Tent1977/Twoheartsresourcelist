@@ -32,26 +32,51 @@
     return String(text == null ? '' : text).normalize('NFKC').replace(INVISIBLE, '');
   }
 
-  /** Version used only for detection: digit words → digits, "dot"/"at" spelled out → symbols. */
+  const TLD = '(?:com|org|net|edu|gov|us|io|me|co|info|biz)';
+  const SEP = '[\\s.\\-_/\\u2010-\\u2015~]{0,5}';
+
+  /** Version used only for detection: digit words → digits, spelled-out emails → symbols. */
   function forDetection(text) {
     return clean(text)
       .toLowerCase()
+      .replace(/\p{Nd}/gu, (d) => String(Number.parseInt(d, 10) || (/\d/.test(d) ? d : '0')))
       .replace(/\b(zero|oh|one|two|three|four|five|six|seven|eight|nine)\b/g, (w) => String(DIGIT_WORDS[w]))
-      .replace(/\s*[([]\s*at\s*[)\]]\s*|\s+at\s+(?=[a-z0-9-]+\s*(?:\.|dot)\s*[a-z]{2,}\b)/g, '@')
-      .replace(/\s*[([]?\s*dot\s*[)\]]?\s*(?=[a-z]{2,}\b)/g, '.');
+      .replace(/(?<=\d)[o](?=\d)|(?<=\d)[o]\b/g, '0')
+      .replace(/(?<=\d)[li](?=\d)/g, '1')
+      .replace(/\b(?=[\dlio]*\d[\dlio]*\d)[\dlio]{3,4}\b/g, (w) => w.replace(/[li]/g, '1').replace(/o/g, '0'))
+      .replace(/\b(\d)\s+(?=\d\b)/g, '$1') // "7 7 5" → "775"
+      .replace(new RegExp(`\\s*[([]\\s*at\\s*[)\\]]\\s*|\\s+at\\s+(?=[a-z0-9-]+\\s*(?:\\.|\\(?dot\\)?)\\s*${TLD}\\b)`, 'g'), '@')
+      .replace(new RegExp(`\\s*[([]?\\s*\\bdot\\b\\s*[)\\]]?\\s*(?=${TLD}\\b)`, 'g'), '.');
   }
 
-  const PHONE = /(?:\d[^\da-z]{0,3}){9}\d/; // 10 digits with any separators
-  const EMAIL = /[\w.+-]+\s*@\s*[\w-]+\s*\.\s*[a-z]{2,}/;
-  const PERSON = '(?:him|her|them|you|u|y\'?all|everyone|everybody|somebody|someone|that (?:\\w+)|the (?:manager|staff|director|guard|case ?manager|owner|landlord|bitch|guy|lady|man|woman)|my (?:roommate|neighbor|case ?manager))';
+  /** Letters swapped for look-alike digits ("k1ll") are folded back, for the threat check only. */
+  const unLeet = (t) => t.replace(/(?<=[a-z])1(?=[a-z])/g, 'i').replace(/(?<=[a-z])0(?=[a-z])/g, 'o').replace(/(?<=[a-z])3(?=[a-z])/g, 'e');
+
+  // Phone-shaped only: 3-3-4 digits. Year ranges ("2019-2023") and room lists don't match.
+  const PHONE = new RegExp(`(?:^|[^\\d])\\(?\\d{3}\\)?${SEP}\\d{3}${SEP}\\d{4}(?!\\d)`);
+  const EMAIL = new RegExp(`[\\w.+-]+@[\\w-]+(?:\\.[\\w-]+)*\\.${TLD}\\b|[\\w.+-]+@[\\w-]+\\.[a-z]{2,}\\b`);
+  const EMAIL_SPACED = new RegExp(`@[a-z0-9-]+\\.${TLD}\\b`);
+  const HANDLE = /\b(?:ig|insta|instagram|snap|snapchat|tiktok|fb|facebook|whatsapp|telegram|cashapp)\s*[:@-]?\s*@?[a-z0-9_.]{3,}/;
+  const PERSON =
+    "(?:him|her|them|you|u|ya|y'?all|everyone|everybody|somebody|someone|this (?:place|bitch|guy|lady|dude)|that (?:\\w+)|the (?:\\w+ )?(?:manager|staff|director|guard|case ?manager|owner|landlord|bitch|guy|lady|man|woman|dude|cop)|ur (?:\\w+)|your (?:\\w+)|my (?:roommate|neighbor|case ?manager))";
+  const INTENT = "(?:i'?ll|i will|i'?m (?:gonna|going to|about to)|i'?d|imma|ima|gonna|going to|finna|we'?ll|we will|we'?re gonna|should|someone should|wanna|want to|i'?m finna|let'?s|about to)";
   const THREATS = [
-    new RegExp(`\\b(?:kill|murder|shoot|stab|beat(?: up)?|hurt|choke|strangle|jump)\\s+${PERSON}\\b(?!\\s+with kindness)`),
-    /\bburn\s+(?:it|this place|the place|the building|this (?:\w+)|that (?:\w+))\s+down\b/,
-    /\b(?:find|know|found) (?:out )?where (?:you|he|she|they) (?:live|sleep|stay)s?\b/,
-    /\b(?:bring|get) (?:a|my) (?:gun|knife|piece)\b/,
+    new RegExp(`\\b${INTENT}\\s+(?:\\w+\\s+){0,2}(?:kill|murder|shoot|stab|beat(?: up)?|hurt|choke|strangle|jump|end|smoke|cut|slap|punch)\\s+${PERSON}\\b(?!\\s+with kindness)`),
+    new RegExp(`\\b(?:kill|shoot|stab|end)\\s+(?:ur|your|that) \\w+\\b`),
+    /\bshoot (?:up )?(?:this|the) (?:place|building|shelter)\b|\bshoot (?:this|the) (?:place|building|shelter) up\b/,
+    /\bburn\s+(?:it|this place|the place|the building|this (?:\w+)|that (?:\w+))\s+down\b|\bburn down (?:the|this) (?:place|building|shelter)\b/,
+    /\b(?:find|know|found) (?:out )?where (?:you|he|she|they|the \w+|that \w+) (?:live|sleep|stay)s?\b/,
+    /\b(?:bring|get|got) (?:a|my) (?:gun|knife|piece|strap)\b/,
   ];
+  const SELF_HARM =
+    /\b(?:kill(?:ing)? myself|end(?:ing)? (?:my life|it all)|suicid\w*|want to die|wanna die|don'?t want to (?:live|be here)|hurt(?:ing)? myself|self[- ]harm)\b/;
   const STREET =
-    /\b\d{1,6}\s+(?:[nsew]\.?\s+|north\s+|south\s+|east\s+|west\s+)?(?:[a-z]+\s+){1,3}(?:st|street|ave|avenue|rd|road|dr|drive|blvd|boulevard|way|ln|lane|ct|court|pl|place|pkwy|cir|circle)\b|\b(?:on|off|near|by)\s+[a-z]+\s+(?:near|and|&|by|off)\s+[a-z]+\b/;
+    /\b\d{1,6}(?:st|nd|rd|th)?\s+(?:[nsew]\.?\s+|north\s+|south\s+|east\s+|west\s+)?(?:[a-z]+\s+){0,3}(?:st|street|ave|avenue|rd|road|dr|drive|blvd|boulevard|way|ln|lane|ct|court|pl|place|pkwy|cir|circle)\b|\b\d{1,2}(?:st|nd|rd|th)\s+(?:st|street|ave|avenue)\b|\b(?:on|off|near|by|at|behind|across from)\s+(?:the\s+)?[a-z]+(?:\s+(?:st|street|ave|avenue|rd|road|dr|drive|blvd|way|ln|lane))?\s+(?:near|and|&|by|off|at)\s+[a-z]+\b|\b(?:corner of|cross streets?|intersection of)\b/;
+
+  /** True when a review mentions self-harm, so the page can offer 988. Never holds the review. */
+  function mentionsSelfHarm(text) {
+    return SELF_HARM.test(clean(text).toLowerCase());
+  }
 
   /**
    * Screen comment text. Returns { status: 'visible' | 'held', reasons: [] }.
@@ -65,12 +90,13 @@
     allowNumbers.forEach((n) => {
       const digits = String(n).replace(/\D/g, '');
       if (digits.length < 7) return;
-      const loose = new RegExp(digits.split('').join('[^\\da-z]{0,3}'), 'g');
+      const loose = new RegExp(digits.split('').join(SEP), 'g');
       phoneScan = phoneScan.replace(loose, ' ');
     });
     if (PHONE.test(phoneScan)) reasons.push('Contains a phone number');
-    if (EMAIL.test(t)) reasons.push('Contains an email address');
-    if (THREATS.some((re) => re.test(t))) reasons.push('Possible threat of violence');
+    if (EMAIL.test(t) || EMAIL_SPACED.test(t.replace(/\s+/g, '')) || HANDLE.test(t)) reasons.push('Contains an email or social media handle');
+    const threatText = unLeet(t);
+    if (THREATS.some((re) => re.test(threatText))) reasons.push('Possible threat against someone');
     if (confidential) {
       if (STREET.test(t)) reasons.push('Mentions a location on a confidential site');
       reasons.push('Reviews of confidential sites are checked by a moderator first');
@@ -191,6 +217,7 @@
     PUBLIC_STATUSES,
     clean,
     screen,
+    mentionsSelfHarm,
     sanitizeRatings,
     sanitizeFacts,
     sanitizeStored,

@@ -61,6 +61,26 @@ describe('schema', () => {
     expect(schema.parsePhones(text).map((p) => [p.number, p.label])).toEqual(expected);
   });
 
+  test('parsePhones puts old or secondary numbers last and drops stray punctuation', () => {
+    const p = schema.parsePhones('775-785-4006 (older Catholic Charities listing); 775-111-2222 intake');
+    expect(p[0].number).toBe('7751112222');
+    expect(schema.parsePhones('(775) 323-7443; alt. (775) 323-0000').map((x) => x.label)).toEqual([null, null]);
+  });
+
+  test('servesTags: all-adult places count for men and women; DV shelters for women', () => {
+    expect(schema.servesTags({ name: 'X', population: 'All adults 18+' })).toEqual(expect.arrayContaining(['men', 'women', 'allAdults']));
+    expect(schema.servesTags({ name: 'Women only home', population: 'women only, adults' })).not.toContain('men');
+    expect(schema.servesTags({ name: 'Y', population: 'survivors', category: 'dv_shelter' })).toEqual(expect.arrayContaining(['dv', 'women']));
+    expect(schema.servesTags({ name: 'Youth place', category: 'youth_shelter' })).toContain('youth');
+    expect(schema.servesTags({ name: 'Apartments', population: 'management office' })).not.toContain('men');
+    expect(schema.servesTags(null)).toEqual([]);
+  });
+
+  test('scrubLocation leaves ordinary words alone', () => {
+    ['Women on Their Way', 'a Better Way', 'Open Road home', 'Ask Dr Smith', 'No Way Home'].forEach((t) => expect(schema.scrubLocation(t)).toBe(t));
+    expect(schema.scrubLocation('E. 4th Street')).toBe('[location withheld]');
+  });
+
   test('parsePhones handles empty and duplicate input', () => {
     expect(schema.parsePhones(null)).toEqual([]);
     expect(schema.parsePhones('775-111-2222 or 775-111-2222')).toHaveLength(1);
@@ -95,6 +115,15 @@ describe('moderation screen', () => {
     'gonna kill that manager',
     'I know where you live',
     'someone should burn the place down',
+    '775 -- 329 -- 4150 is mine',
+    '775 555 l2l2 call',
+    'j a n e @ g m a i l . c o m',
+    'IG @handle123 hit me up',
+    'imma k1ll him',
+    'kill ur manager',
+    'gonna shoot up this place',
+    'burn down the building',
+    'i know where the manager lives',
   ])('holds "%s"', (text) => {
     expect(moderation.screen(text).status).toBe('held');
   });
@@ -104,6 +133,14 @@ describe('moderation screen', () => {
     'they kill you with kindness',
     'great place to live honestly',
     'The hotline 775-329-4150 helped me',
+    'I arrived at night. Then the staff helped me',
+    'got there at noon. Lunch was ok',
+    'I stayed there 2019-2023, 12 months',
+    'Rooms 101 102 103 104 are cold',
+    'A guard beat him in the lobby',
+    'Staff hurt her when they dragged her out',
+    'bed bugs will kill you',
+    'people will jump you in the showers',
   ])('lets through "%s"', (text) => {
     expect(moderation.screen(text, { allowNumbers: ['7753294150'] }).status).toBe('visible');
   });
@@ -113,6 +150,12 @@ describe('moderation screen', () => {
     expect(moderation.screen('it is at 123 n virginia st', { confidential: true }).reasons).toContain('Mentions a location on a confidential site');
     expect(moderation.screen('on Maple near Oakdale', { confidential: true }).reasons).toContain('Mentions a location on a confidential site');
   });
+});
+
+test('mentionsSelfHarm flags crisis language without holding the review', () => {
+  expect(moderation.mentionsSelfHarm('I want to kill myself some days here')).toBe(true);
+  expect(moderation.mentionsSelfHarm('the staff were great')).toBe(false);
+  expect(moderation.screen('I want to kill myself some days here').status).toBe('visible');
 });
 
 describe('moderation comments', () => {

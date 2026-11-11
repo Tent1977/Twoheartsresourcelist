@@ -71,7 +71,40 @@
 
   const PHONE_RE = /(?:\b1[\s.-]?)?\(?\b(\d{3})\)?[\s.-]?(\d{3})[\s.-]?(\d{4})\b|\b(211|311|911|988)\b/g;
   const STREET_WORDS =
-    /\b\d{1,6}\s+(?:[NSEW]\.?\s+)?(?:[A-Za-z]+\s+){1,3}(?:St|Street|Ave|Avenue|Rd|Road|Dr|Drive|Blvd|Way|Ln|Lane|Ct|Court|Pl|Place|Pkwy|Cir)\b\.?|\b[A-Z][a-z]+\s+(?:St|Street|Ave|Avenue|Rd|Road|Dr|Drive|Blvd|Way|Ln|Lane)\b\.?(?:\s+(?:facility|site|campus|location))?/g;
+    /\b\d{1,6}\s+(?:[NSEW]\.?\s+)?(?:[A-Za-z0-9]+\s+){1,3}(?:St|Street|Ave|Avenue|Rd|Road|Dr|Drive|Blvd|Way|Ln|Lane|Ct|Court|Pl|Place|Pkwy|Cir)\b\.?|\b(?:[NSEW]\.?\s+)?\d{1,2}(?:st|nd|rd|th)\s+(?:St|Street|Ave|Avenue)\b\.?|\b[A-Z][a-z]+\s+(?:St|Ave|Blvd|Rd|Ln)\b\.?(?:\s+(?:facility|site|campus|location))?/g;
+
+  /** Words in a "who it serves" text, mapped to filter tags. */
+  const SERVES = {
+    women: /(^|[^a-z])(women|womens|woman|female|females|mothers?|girls?)([^a-z]|$)/i,
+    men: /(^|[^a-z])(men|mens|male|males|fathers?)([^a-z]|$)/i,
+    families: /(^|[^a-z])(famil\w*|children|child|kids|parents?|parenting)([^a-z]|$)/i,
+    youth: /(^|[^a-z])(youth|young adults?|teens?|minors?|18\s*[-–]\s*24|12\s*[-–]\s*17)([^a-z]|$)/i,
+    veterans: /(^|[^a-z])veterans?([^a-z]|$)/i,
+    seniors: /(^|[^a-z])(seniors?|elderly|62\+?|55\+)([^a-z]|$)/i,
+    disabilities: /(^|[^a-z])disab\w*/i,
+    recovery: /(^|[^a-z])(recovery|sober|substance|addiction)([^a-z]|$)/i,
+    reentry: /(^|[^a-z])(reentry|re-entry|parole|probation|incarcerat\w*|prison)([^a-z]|$)/i,
+    dv: /(^|[^a-z])(domestic|dv|survivors?|family violence|sexual assault|trafficking)([^a-z]|$)/i,
+    allAdults: /(^|[^a-z])(all adults|adults 18\+?|anyone|all genders|single adults|singles|general|any adult|adults)([^a-z]|$)/i,
+  };
+
+  /**
+   * Tags for "who it serves" filters, from the population text, name and category.
+   * Places that take any adult count for both men and women.
+   */
+  function servesTags(record) {
+    const text = `${(record && record.name) || ''} ${(record && record.population) || ''}`;
+    const tags = Object.keys(SERVES).filter((k) => SERVES[k].test(text));
+    if (record && record.category === 'dv_shelter' && !tags.includes('dv')) tags.push('dv');
+    if (record && /youth/.test(record.category || '') && !tags.includes('youth')) tags.push('youth');
+    const onlyOneGender = /\b(women only|women's only|only women|men only|men's only|only men)\b/i.test(text);
+    if (tags.includes('allAdults') && !onlyOneGender) {
+      if (!tags.includes('women')) tags.push('women');
+      if (!tags.includes('men')) tags.push('men');
+    }
+    if (tags.includes('dv') && !tags.includes('women')) tags.push('women');
+    return tags;
+  }
 
   /**
    * Split a free-text phone field into callable numbers with labels.
@@ -91,7 +124,8 @@
       consumed = afterLabel ? end + after[0].length : end;
       const label = `${before} ${afterLabel}`
         .replace(/[();,]/g, ' ')
-        .replace(/\b(or|also|alt\.?|listed|and)\b/gi, ' ')
+        .replace(/\b(?:or|also|listed|and)\b|\balt\b\.?/gi, ' ')
+        .replace(/(^|\s)[.:/-]+(?=\s|$)/g, ' ')
         .replace(/\s+/g, ' ')
         .trim()
         .replace(/^[-:\s]+|[-:\s]+$/g, '');
@@ -106,7 +140,9 @@
       }
       if (!out.some((p) => p.number === number)) out.push({ number, display, label: label || null });
     });
-    return out;
+    // Old, secondary or policy-document numbers go last so the main Call button is the best one.
+    const weak = (p) => (p.label && /\b(older|old|listed|policy|alt|county policy|previous)\b/i.test(p.label) ? 1 : 0);
+    return out.map((p, i) => ({ p, i })).sort((a, b) => weak(a.p) - weak(b.p) || a.i - b.i).map((x) => x.p);
   }
 
   /** Remove street names / numbered addresses from free text (for confidential sites). */
@@ -153,6 +189,7 @@
       city: record.city || null,
       phone: record.phone || null,
       phones: parsePhones(record.phone),
+      serves: servesTags(record),
       website: record.website || null,
       howToApply: hide(record.how_to_apply || null),
       units: confidential || record.units == null ? null : record.units,
@@ -181,6 +218,7 @@
     emptyFacts,
     isConfidential,
     parsePhones,
+    servesTags,
     scrubLocation,
     normalizeSearch,
     toFacility,

@@ -198,12 +198,9 @@
     async create() {
       const config = root.SHELTER_WATCH_CONFIG && root.SHELTER_WATCH_CONFIG.firebase;
       if (!config) return demoStore();
-      try {
-        return await firestoreStore(config);
-      } catch (e) {
-        console.error('Shelter Watch: Firestore unavailable, falling back to demo mode', e);
-        return demoStore();
-      }
+      // No silent fallback: if live reviews can't load, the page says so instead of
+      // pretending reviews were posted when they were only saved on this device.
+      return firestoreStore(config);
     },
   };
 })(self);

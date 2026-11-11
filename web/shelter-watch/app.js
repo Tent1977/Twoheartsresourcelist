@@ -62,7 +62,27 @@
   const esc = (s) =>
     String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const optLabel = (v) => (v == null ? '—' : OPTION_LABELS[v] || v);
-  const commentsFor = (id) => state.comments.filter((c) => c.facilityId === id);
+  let byFacility = null;
+  const commentsFor = (id) => {
+    if (!byFacility) {
+      byFacility = new Map();
+      state.comments.forEach((c) => {
+        if (!byFacility.has(c.facilityId)) byFacility.set(c.facilityId, []);
+        byFacility.get(c.facilityId).push(c);
+      });
+    }
+    return byFacility.get(id) || [];
+  };
+  const setComments = (list) => {
+    state.comments = list;
+    byFacility = null;
+  };
+  const SYNONYMS = {
+    bed: ['shelter'], beds: ['shelter'], tonight: ['shelter'], sleep: ['shelter'], dog: ['pet'], dogs: ['pet'], cat: ['pet'],
+    teen: ['youth'], teens: ['youth'], kid: ['children', 'famil'], kids: ['children', 'famil'], vet: ['veteran'], vets: ['veteran'],
+    sober: ['recovery', 'sober'], rehab: ['recovery'], cheap: ['affordable', 'low cost'], dv: ['domestic', 'violence'],
+    abuse: ['domestic', 'violence'], elderly: ['senior'], old: ['senior'], food: ['meal', 'kitchen', 'food'],
+  };
   const safeUrl = (u) => {
     const t = String(u || '').trim();
     if (/^https?:\/\/[^\s<>"']+$/i.test(t)) return t;
@@ -87,8 +107,9 @@
       phones: [], sources: [], leadership: [], confidential: false, researchConfidence: 'low', establishmentAskedAt: null,
       ...f, facts,
     };
-    full.searchText = schema.normalizeSearch(
-      [full.name, full.operator, full.address, full.city, full.category, full.population, full.researchNotes, full.howToApply, full.group].join(' ')
+    full.serves = Array.isArray(full.serves) ? full.serves : [];
+    full.searchText = ' ' + schema.normalizeSearch(
+      [full.name, full.operator, full.address, full.city, full.category, full.population, full.researchNotes, full.howToApply, full.group, (full.serves || []).join(' ')].join(' ')
     );
     full.whoText = schema.normalizeSearch(`${full.name} ${full.population || ''} ${full.category || ''}`);
     full.petText = schema.normalizeSearch(`${full.population || ''} ${full.researchNotes || ''} ${full.howToApply || ''}`);
@@ -122,13 +143,18 @@
   function filtered() {
     const f = state.filters;
     const words = schema.normalizeSearch(f.q).split(' ').filter(Boolean);
-    const whoRe = (WHO.find((w) => w[0] === f.who) || [])[2];
+    const filler = new Set(['a', 'an', 'the', 'for', 'in', 'of', 'to', 'and', 'need', 'place', 'places', 'near', 'me', 'with']);
     return state.facilities.filter((x) => {
       if (f.type && x.group !== f.type) return false;
       if (f.conf && x.researchConfidence !== f.conf) return false;
-      if (whoRe && !whoRe.test(` ${x.whoText} `)) return false;
+      if (f.who && !x.serves.includes(f.who)) return false;
       if (f.pets && !PETS.test(` ${x.petText} `)) return false;
-      return words.every((w) => x.searchText.includes(w));
+      return words.every((w) => {
+        if (filler.has(w)) return true;
+        const options = [w, ...(SYNONYMS[w] || [])];
+        // Short words must match a whole word ("men" shouldn't find "mental"); longer ones match word starts.
+        return options.some((o) => (o.length <= 3 ? new RegExp(` ${o}s? `).test(`${x.searchText} `) : x.searchText.includes(` ${o}`)));
+      });
     });
   }
 
@@ -150,7 +176,7 @@
         <label class="search"><span class="visually-hidden">Search</span>
           <input type="search" id="q" placeholder="Search a name, street or need…" value="${esc(f.q)}" autocomplete="off"></label>
       </div>
-      <details class="more-filters"${f.type || f.who || f.conf ? ' open' : ''}><summary>More filters</summary><div class="filters-more">
+      <details class="more-filters"${f.type || f.who || f.conf ? ' open' : ''}><summary>More filters${[f.type, f.who, f.conf].filter(Boolean).length ? ` (${[f.type, f.who, f.conf].filter(Boolean).length} on)` : ''}</summary><div class="filters-more">
         <label><span class="visually-hidden">Type of place</span><select id="type"><option value="">All types</option>${GROUP_ORDER.map(
           (g) => `<option value="${esc(g)}" ${g === f.type ? 'selected' : ''}>${esc(GROUP_LABELS[g])}</option>`
         ).join('')}</select></label>
@@ -168,14 +194,17 @@
       history.replaceState(null, '', filtersToHash());
       renderResults();
     };
+    let timer;
     document.getElementById('q').addEventListener('input', (e) => {
       state.filters.q = e.target.value;
-      update();
+      clearTimeout(timer);
+      timer = setTimeout(update, 80);
     });
     ['type', 'who', 'conf'].forEach((id) =>
       document.getElementById(id).addEventListener('change', (e) => {
         state.filters[id] = e.target.value;
         syncChips();
+        syncMoreCount();
         update();
       })
     );
@@ -187,11 +216,18 @@
         document.getElementById('type').value = state.filters.type;
         document.getElementById('who').value = state.filters.who;
         syncChips();
+        syncMoreCount();
         update();
       })
     );
     app.onclick = onResultsClick;
     renderResults();
+  }
+
+  function syncMoreCount() {
+    const n = [state.filters.type, state.filters.who, state.filters.conf].filter(Boolean).length;
+    const sum = app.querySelector('.more-filters summary');
+    if (sum) sum.textContent = n ? `More filters (${n} on)` : 'More filters';
   }
 
   function syncChips() {
@@ -242,7 +278,11 @@
           <p class="meta">${esc(GROUP_LABELS[x.group] || x.group)}${x.city ? ' · ' + esc(x.city) : ''}${
             x.status && !/^(open|active)/i.test(x.status) ? ` · <strong>${esc(String(x.status).split(/[;(]/)[0].trim())}</strong>` : ''
           }</p>
-          ${call ? `<a class="call-btn" href="tel:${esc(call.number)}" aria-label="Call ${esc(x.name)} at ${esc(call.display)}">Call ${esc(call.display)}</a>` : ''}
+          ${call
+            ? `<a class="call-btn" href="tel:${esc(call.number)}" aria-label="Call ${esc(call.display)}, ${esc(x.name)}">Call ${esc(call.display)}</a>`
+            : x.group === 'Shelter'
+              ? `<a class="call-btn alt" href="tel:211" aria-label="Call 211 about ${esc(x.name)}">Call 211 for help</a>`
+              : ''}
           ${x.population ? `<p class="meta who">${esc(String(x.population).slice(0, 110))}</p>` : ''}
           <div class="row">
             ${r.score == null ? `<span class="score none">No score yet</span>` : `<span class="score">Claude Rating ${r.score}/100</span>`}
@@ -304,7 +344,7 @@
     if (state.store && state.store.mode === 'live') {
       try {
         const fresh = await state.store.listFor(x.id);
-        state.comments = [...state.comments.filter((c) => c.facilityId !== x.id), ...fresh];
+        setComments([...state.comments.filter((c) => c.facilityId !== x.id), ...fresh]);
         if (location.hash.startsWith(`#/f/${encodeURIComponent(x.id)}`)) refreshDetailSections(x, { form: false });
       } catch (e) {
         /* keep what we have */
@@ -411,7 +451,7 @@
           let reportUi = '';
           if (mine && c.id === mine) reportUi = '<span class="meta">Your review</span>';
           else if (state.store && state.store.hasReported(c.id)) reportUi = '<span class="meta">You reported this.</span>';
-          else if (state.store && c.id) reportUi = `<button type="button" class="linkbtn" data-report="${esc(c.id)}">Report</button>`;
+          else if (state.store && c.id) reportUi = `<button type="button" class="linkbtn" data-report="${esc(c.id)}" aria-label="Report review from ${esc(String(c.createdAt).slice(0, 10))}">Report</button>`;
           return `<article class="comment">
             <div class="row"><span class="chip">${esc(rel)}</span><span class="meta">${esc(String(c.createdAt).slice(0, 10))}</span></div>
             <p class="comment-text">${esc(c.text)}</p>
@@ -469,7 +509,7 @@
 
   function renderDetail(x) {
     const cs = commentsFor(x.id);
-    const callButtons = x.phones
+    const callButtons = (x.phones.length ? x.phones : [{ number: '211', display: '211', label: 'no direct number listed — 211 can connect you' }])
       .slice(0, 2)
       .map((p) => `<a class="call-btn big" href="tel:${esc(p.number)}">Call ${esc(p.display)}${p.label ? ` <small>${esc(p.label)}</small>` : ''}</a>`)
       .join('');
@@ -529,7 +569,10 @@
           <button type="button" class="linkbtn" data-cancel-report>Cancel</button>`;
         box.querySelector('[data-confirm-report]').focus();
       } else if (no) {
+        const id = no.closest('.report-ui').querySelector('[data-confirm-report]').dataset.confirmReport;
         refreshDetailSections(x, { form: false });
+        const again = app.querySelector(`[data-report="${CSS.escape(id)}"]`);
+        if (again) again.focus();
       } else if (yes) {
         const id = yes.dataset.confirmReport;
         yes.disabled = true;
@@ -537,9 +580,9 @@
         try {
           await state.store.report(id);
           if (state.store.mode === 'live') {
-            state.comments = state.comments.map((c) => (c.id === id ? moderation.addReport(c) : c));
+            setComments(state.comments.map((c) => (c.id === id ? moderation.addReport(c) : c)));
           } else {
-            state.comments = await state.store.listAll();
+            setComments(await state.store.listAll());
           }
           refreshDetailSections(x, { form: false });
           say('Thanks. Your report was sent.');
@@ -576,14 +619,19 @@
       btn.textContent = 'Posting…';
       try {
         const saved = await state.store.add(prepared);
-        state.comments.push(saved);
+        setComments([...state.comments, saved]);
         state.myReview = { id: saved.id };
         refreshDetailSections(x);
         const text =
           prepared.status === 'held'
             ? `Thanks. Your review was saved and is waiting for a moderator (${prepared.heldReasons.join('; ').toLowerCase()}).`
-            : 'Thanks. Your review is posted.';
-        document.getElementById('form-slot').insertAdjacentHTML('afterbegin', `<p class="panel notice" id="posted-msg" tabindex="-1">${esc(text)}</p>`);
+            : state.store.mode === 'live'
+              ? 'Thanks. Your review was sent. It may be checked before it appears.'
+              : 'Thanks. Your review is saved on this device.';
+        const care = moderation.mentionsSelfHarm(prepared.text)
+          ? '<p class="panel care">If you are thinking about hurting yourself, you are not alone. Call or text <a href="tel:988">988</a> any time, day or night.</p>'
+          : '';
+        document.getElementById('form-slot').insertAdjacentHTML('afterbegin', `<p class="panel notice" id="posted-msg" tabindex="-1">${esc(text)}</p>${care}`);
         document.getElementById('posted-msg').focus();
         say(text);
       } catch (err) {
@@ -611,42 +659,52 @@
   async function start() {
     let data;
     try {
-      const res = await fetch('facilities.json');
+      const ctrl = new AbortController();
+      const timer = setTimeout(() => ctrl.abort(), 12000);
+      const res = await fetch('facilities.json', { signal: ctrl.signal });
+      clearTimeout(timer);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       data = await res.json();
     } catch (err) {
       app.innerHTML = `<h1 tabindex="-1">Shelter Watch couldn't load</h1>
-        <p>Check your connection and <a href="">try again</a>. For shelter help right now, call <a href="tel:211">211</a>.</p>`;
+        <p>The connection may be slow. <button type="button" class="secondary" id="retry">Try again</button></p>
+        <p>For shelter help right now, call <a href="tel:211">211</a>.</p>`;
+      document.getElementById('retry').onclick = () => location.reload();
+      app.querySelector('h1').focus();
       return;
     }
     const rank = (g) => GROUP_ORDER.indexOf(g) + 1 || 99;
     // Open places first; planned, under construction, closed or temporary ones last.
     const CATEGORY_ORDER = ['emergency_shelter', 'family_shelter', 'seasonal_overflow', 'youth_shelter', 'dv_shelter', 'safe_camp/sanctioned_camp', 'motel_voucher'];
     const catRank = (c) => (CATEGORY_ORDER.indexOf(c) + 1) || 50;
-    const statusRank = (st) => {
-      const v = String(st || '').toLowerCase();
-      if (/planned|construction|closed|temporar|ended|evacuation/.test(v)) return 2;
-      return /^(open|active)/.test(v) ? 0 : 1;
+    const statusRank = (f) => {
+      if (/evacuation/i.test(f.name)) return 2;
+      const v = String(f.status || '').toLowerCase();
+      if (/^(open|active)/.test(v)) return 0;
+      if (/^(planned|under construction|closed|ended)|evacuation/.test(v)) return 2;
+      return 1;
     };
     state.facilities = (Array.isArray(data.facilities) ? data.facilities : [])
       .filter((f) => f && f.id && f.name)
       .map(hydrate)
-      .sort((a, b) => rank(a.group) - rank(b.group) || statusRank(a.status) - statusRank(b.status) || catRank(a.category) - catRank(b.category) || a.name.localeCompare(b.name));
+      .sort((a, b) => rank(a.group) - rank(b.group) || statusRank(a) - statusRank(b) || catRank(a.category) - catRank(b.category) || a.name.localeCompare(b.name));
     state.facilities.forEach((f) => state.byId.set(f.id, f));
     state.aliases = data.aliases && typeof data.aliases === 'object' ? data.aliases : {};
 
     try {
       state.store = await self.ShelterWatchStore.create();
-      state.comments = await state.store.listAll();
+      setComments(await state.store.listAll());
     } catch (err) {
       state.store = null;
-      state.comments = [];
+      setComments([]);
       banner.innerHTML = '<p class="banner">Reviews are unavailable right now. Listings still work.</p>';
     }
-    if (state.store && state.store.mode === 'demo') {
-      banner.innerHTML = state.store.persistent
-        ? '<p class="banner"><strong>Test version.</strong> Reviews you post are saved only on this device. Nobody else can see them yet.</p>'
-        : "<p class=\"banner\"><strong>Test version.</strong> This browser isn't saving data, so reviews disappear when you close the page.</p>";
+    // The banner is already in the HTML (so the page doesn't jump); only change it when it's wrong.
+    if (state.store && state.store.mode === 'demo' && !state.store.persistent) {
+      banner.innerHTML =
+        "<p class=\"banner\"><strong>Test version.</strong> This browser isn't saving data, so reviews disappear when you close the page.</p>";
+    } else if (state.store && state.store.mode === 'live') {
+      banner.innerHTML = '<p class="banner">Listings are not all confirmed yet. Call before you go.</p>';
     }
     window.addEventListener('hashchange', route);
     route();

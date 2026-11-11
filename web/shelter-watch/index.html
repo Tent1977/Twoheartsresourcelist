@@ -5,8 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Shelter Watch — Washoe County shelter &amp; housing</title>
   <meta name="description" content="Shelter and housing in Reno, Sparks and Washoe County — what places say, what residents say, and what checks out.">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.gstatic.com; style-src 'self'; img-src 'self' data:; connect-src 'self' https://*.googleapis.com https://*.firebaseio.com https://*.cloudfunctions.net; frame-src https://*.firebaseapp.com; base-uri 'none'; form-action 'self'; object-src 'none'">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.gstatic.com https://www.google.com https://www.recaptcha.net; style-src 'self'; img-src 'self' data:; connect-src 'self' https://*.googleapis.com https://*.firebaseio.com https://*.cloudfunctions.net; frame-src https://*.firebaseapp.com https://www.google.com https://www.recaptcha.net; worker-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'self'; object-src 'none'">
   <meta name="referrer" content="strict-origin-when-cross-origin">
+  <link rel="preload" href="facilities.json" as="fetch" crossorigin>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -28,10 +29,10 @@
     </div>
   </header>
 
-  <div id="banner" class="wrap"></div>
+  <div id="banner" class="wrap"><p class="banner"><strong>Test version.</strong> Listings were gathered in November 2026 and are not all confirmed. Call before you go. Reviews you post are saved only on this device for now.</p></div>
 
   <main id="app" class="wrap" tabindex="-1">
-    <p class="loading">Loading places…</p>
+    <p class="loading">Loading places… If this takes a while, call <a href="tel:211">211</a> for shelter help now.</p>
   </main>
 
   <div id="sr-status" class="visually-hidden" role="status" aria-live="polite"></div>
@@ -48,12 +49,13 @@
     </div>
   </footer>
 
-  <script src="config.js"></script>
-  <script src="lib/schema.js"></script>
-  <script src="lib/moderation.js"></script>
-  <script src="lib/factcheck.js"></script>
-  <script src="lib/ratings.js"></script>
-  <script src="store.js"></script>
-  <script src="app.js"></script>
+  <script src="config.js" defer></script>
+  <script src="lib/schema.js" defer></script>
+  <script src="lib/moderation.js" defer></script>
+  <script src="lib/factcheck.js" defer></script>
+  <script src="lib/ratings.js" defer></script>
+  <script src="store.js" defer></script>
+  <script src="app.js" defer></script>
+  <script src="sw-register.js" defer></script>
 </body>
 </html>

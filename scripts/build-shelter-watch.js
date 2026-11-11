@@ -73,5 +73,22 @@ facilities.forEach((f) => {
 });
 fs.writeFileSync(path.join(root, 'functions/facility-info.json'), JSON.stringify(info));
 
+// Keep the database rules' list of real and confidential listings in step with the data.
+const rulesPath = path.join(webDir, 'firestore.rules');
+const rules = fs.readFileSync(rulesPath, 'utf8');
+const list = (ids) => `[${ids.map((id) => `'${id}'`).join(', ')}]`;
+const generated = [
+  '    // BEGIN GENERATED (scripts/build-shelter-watch.js) — do not edit by hand',
+  `    function knownFacility(id) { return id in ${list(facilities.map((f) => f.id))}; }`,
+  `    function confidentialFacility(id) { return id in ${list(facilities.filter((f) => f.confidential).map((f) => f.id))}; }`,
+  '    // END GENERATED',
+].join('\n');
+const next = rules.replace(/    \/\/ BEGIN GENERATED[\s\S]*?\/\/ END GENERATED/, generated);
+if (next === rules && !rules.includes(generated)) {
+  console.error('firestore.rules is missing the GENERATED markers');
+  process.exit(1);
+}
+fs.writeFileSync(rulesPath, next);
+
 const kb = (fs.statSync(path.join(webDir, 'facilities.json')).size / 1024).toFixed(0);
 console.log(`Wrote ${compact.length} facilities (${kb} KB) to web/shelter-watch/facilities.json`);
