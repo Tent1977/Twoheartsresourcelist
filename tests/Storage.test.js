@@ -171,3 +171,48 @@ describe('deleteStore()', () => {
     expect(load(p)).toEqual([]);
   });
 });
+
+// ── default path (DEFAULT_PATH) ───────────────────────────────────────────
+// DEFAULT_PATH is computed from process.cwd() when the module loads, so we
+// point cwd at a throwaway directory and re-require the module. The real
+// data/resources.json is never touched.
+
+describe('default path (no filePath argument)', () => {
+  let tmpRoot;
+  let Store;
+
+  beforeEach(() => {
+    tmpRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'storage-default-'));
+    jest.spyOn(process, 'cwd').mockReturnValue(tmpRoot);
+    jest.isolateModules(() => {
+      Store = require('../src/Storage');
+    });
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
+    fs.rmSync(tmpRoot, { recursive: true, force: true });
+  });
+
+  test('DEFAULT_PATH resolves to <cwd>/data/resources.json', () => {
+    expect(Store.DEFAULT_PATH).toBe(path.join(tmpRoot, 'data', 'resources.json'));
+  });
+
+  test('load() with no argument returns [] when the default file does not exist', () => {
+    expect(Store.load()).toEqual([]);
+  });
+
+  test('save() with no argument creates data/ and writes the default file', () => {
+    const data = [{ id: 1, name: 'Food Bank' }];
+    Store.save(data);
+    expect(fs.existsSync(Store.DEFAULT_PATH)).toBe(true);
+    expect(Store.load()).toEqual(data);
+  });
+
+  test('deleteStore() with no argument removes the default file', () => {
+    Store.save([{ id: 1 }]);
+    expect(Store.deleteStore()).toBe(true);
+    expect(fs.existsSync(Store.DEFAULT_PATH)).toBe(false);
+    expect(Store.deleteStore()).toBe(false);
+  });
+});
