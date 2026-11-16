@@ -1,0 +1,637 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}</style></head><body>
+<title>Two Hearts Resource List</title>
+<style>
+  :root {
+    --bg:        #F7F5F0;
+    --surface:   #FFFFFF;
+    --border:    #DDD9D2;
+    --text:      #1A1917;
+    --muted:     #6B6760;
+    --accent:    #2D6A4F;
+    --accent-lt: #EAF3EE;
+    --accent-md: #74B49B;
+    --done-bg:   #EAF3EE;
+    --done-fg:   #1F5C3A;
+    --partial-bg:#FEF3DC;
+    --partial-fg:#7A5200;
+    --missing-bg:#FDEAEA;
+    --missing-fg:#8B2020;
+    --code-bg:   #F0EDE8;
+    --row-alt:   #F9F7F4;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg:        #141614;
+      --surface:   #1C1F1C;
+      --border:    #2E332E;
+      --text:      #E8E6E2;
+      --muted:     #8A8F88;
+      --accent:    #3D8B67;
+      --accent-lt: #1A2B22;
+      --accent-md: #5AA882;
+      --done-bg:   #192A22;
+      --done-fg:   #6ECFA0;
+      --partial-bg:#2A2210;
+      --partial-fg:#E0A840;
+      --missing-bg:#2A1414;
+      --missing-fg:#E07070;
+      --code-bg:   #1A1C1A;
+      --row-alt:   #1F221F;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --bg:        #141614;
+    --surface:   #1C1F1C;
+    --border:    #2E332E;
+    --text:      #E8E6E2;
+    --muted:     #8A8F88;
+    --accent:    #3D8B67;
+    --accent-lt: #1A2B22;
+    --accent-md: #5AA882;
+    --done-bg:   #192A22;
+    --done-fg:   #6ECFA0;
+    --partial-bg:#2A2210;
+    --partial-fg:#E0A840;
+    --missing-bg:#2A1414;
+    --missing-fg:#E07070;
+    --code-bg:   #1A1C1A;
+    --row-alt:   #1F221F;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.65;
+    padding: 48px 24px 96px;
+  }
+
+  .doc {
+    max-width: 780px;
+    margin: 0 auto;
+  }
+
+  .doc-header {
+    border-left: 4px solid var(--accent);
+    padding-left: 20px;
+    margin-bottom: 48px;
+  }
+
+  .doc-eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  .doc-title {
+    font-family: Palatino, 'Palatino Linotype', 'Book Antiqua', Georgia, serif;
+    font-size: 34px;
+    font-weight: normal;
+    line-height: 1.15;
+    color: var(--text);
+    text-wrap: balance;
+    margin-bottom: 16px;
+  }
+
+  .doc-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 20px;
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  .doc-meta span { display: flex; align-items: center; gap: 5px; }
+
+  .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent-md); flex-shrink: 0; }
+
+  .section {
+    margin-bottom: 52px;
+  }
+
+  .section-heading {
+    font-family: Palatino, 'Palatino Linotype', 'Book Antiqua', Georgia, serif;
+    font-size: 21px;
+    font-weight: normal;
+    color: var(--text);
+    margin-bottom: 18px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+    text-wrap: balance;
+  }
+
+  .blurb {
+    background: var(--accent-lt);
+    border-left: 3px solid var(--accent);
+    padding: 16px 20px;
+    border-radius: 0 4px 4px 0;
+    color: var(--text);
+    font-size: 14.5px;
+    line-height: 1.7;
+  }
+
+  .file-tree {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 18px 20px;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 13px;
+    line-height: 1.8;
+    color: var(--text);
+    overflow-x: auto;
+  }
+
+  .file-tree .dir  { color: var(--accent); font-weight: 600; }
+  .file-tree .note { color: var(--muted); font-size: 12px; }
+
+  .module-card {
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 16px;
+    background: var(--surface);
+  }
+
+  .module-card-header {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    padding: 14px 18px;
+    background: var(--accent-lt);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .module-name {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 13.5px;
+    font-weight: 700;
+    color: var(--accent);
+  }
+
+  .module-desc {
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+  }
+
+  th {
+    text-align: left;
+    padding: 9px 14px;
+    font-size: 11px;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 600;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+  }
+
+  td {
+    padding: 9px 14px;
+    vertical-align: top;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+  }
+
+  tr:last-child td { border-bottom: none; }
+  tr:nth-child(even) td { background: var(--row-alt); }
+
+  td code, th code {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 12.5px;
+    background: var(--code-bg);
+    padding: 1px 5px;
+    border-radius: 3px;
+    color: var(--accent);
+  }
+
+  .coverage-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .coverage-card {
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 14px 16px;
+    background: var(--surface);
+  }
+
+  .coverage-card-file {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 12.5px;
+    color: var(--text);
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+
+  .coverage-card-label {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+
+  .badge {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    padding: 3px 9px;
+    border-radius: 20px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .badge-done    { background: var(--done-bg);    color: var(--done-fg); }
+  .badge-partial { background: var(--partial-bg); color: var(--partial-fg); }
+  .badge-missing { background: var(--missing-bg); color: var(--missing-fg); }
+
+  .gaps-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 12px;
+  }
+
+  .gaps-list li {
+    padding: 7px 12px;
+    background: var(--row-alt);
+    border-left: 3px solid var(--border);
+    border-radius: 0 3px 3px 0;
+    font-size: 13.5px;
+    color: var(--text);
+  }
+
+  .gaps-list li em {
+    font-style: normal;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 12.5px;
+    color: var(--muted);
+  }
+
+  .priority-table-wrap { overflow-x: auto; }
+
+  .p1 { color: var(--missing-fg); font-weight: 700; }
+  .p2 { color: var(--partial-fg); font-weight: 700; }
+  .p3 { color: var(--muted);      font-weight: 600; }
+
+  .next-items {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .next-item {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 13px 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+  }
+
+  .next-num {
+    font-family: Palatino, 'Palatino Linotype', Georgia, serif;
+    font-size: 22px;
+    font-weight: normal;
+    color: var(--accent-md);
+    line-height: 1;
+    min-width: 28px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .next-text strong {
+    display: block;
+    font-size: 14px;
+    margin-bottom: 3px;
+    color: var(--text);
+  }
+
+  .next-text span {
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  .run-block {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 18px 20px;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 13px;
+    line-height: 2;
+    color: var(--text);
+    overflow-x: auto;
+  }
+
+  .run-block .comment { color: var(--muted); }
+  .run-block .cmd     { color: var(--accent); }
+
+  .doc-footer {
+    margin-top: 64px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+    font-size: 12.5px;
+    color: var(--muted);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  @media (max-width: 560px) {
+    .doc-title { font-size: 26px; }
+    .coverage-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+
+<div class="doc">
+
+  <header class="doc-header">
+    <div class="doc-eyebrow">Coding Summary &middot; ableexperience@gmail.com</div>
+    <h1 class="doc-title">Two Hearts Resource List</h1>
+    <div class="doc-meta">
+      <span><span class="dot"></span>Tent1977/Twoheartsresourcelist</span>
+      <span><span class="dot"></span>Branch: claude/analyze-test-coverage-xVHkm</span>
+      <span><span class="dot"></span>November 16, 2026</span>
+    </div>
+  </header>
+
+  <section class="section">
+    <h2 class="section-heading">What Was Built</h2>
+    <div class="blurb">
+      A JavaScript / Node.js resource list manager for Two Hearts Community Aid &mdash; a tool for tracking community services such as food banks, shelters, clinics, and support programs. Built with five source modules, a Jest test suite, and a coverage analysis plan. All 192 tests now passing across 6 suites with 100% statement coverage on every module.
+    </div>
+  </section>
+
+  <section class="section">
+    <h2 class="section-heading">Project Structure</h2>
+    <div class="file-tree">
+<span class="dir">Twoheartsresourcelist/</span>
+├── package.json              <span class="note">← Node project config; Jest test runner</span>
+├── CODING_SUMMARY.md         <span class="note">← Full written record</span>
+├── TEST_COVERAGE_ANALYSIS.md <span class="note">← Detailed gap analysis</span>
+├── <span class="dir">src/</span>
+│   ├── index.js              <span class="note">← Entry point; re-exports all modules</span>
+│   ├── ResourceList.js       <span class="note">← Core: add/remove/update/deactivate</span>
+│   ├── Validator.js          <span class="note">← Input validation (phone, category…)</span>
+│   ├── Search.js             <span class="note">← Keyword search, filter, sort, paginate</span>
+│   ├── Stats.js              <span class="note">← Counts, summaries, reporting</span>
+│   └── Storage.js            <span class="note">← JSON file persistence</span>
+└── <span class="dir">tests/</span>
+    ├── ResourceList.test.js  <span class="note">← 100% coverage — all 10 methods</span>
+    ├── Validator.test.js     <span class="note">← 100% coverage — all 5 validators</span>
+    ├── Search.test.js        <span class="note">← New — all 6 exports, 50+ cases</span>
+    ├── Stats.test.js         <span class="note">← New — all 5 exports</span>
+    ├── Storage.test.js       <span class="note">← New — round-trip, error cases</span>
+    └── integration.test.js  <span class="note">← New — end-to-end pipeline</span>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2 class="section-heading">Source Modules</h2>
+
+    <div class="module-card">
+      <div class="module-card-header">
+        <span class="module-name">src/ResourceList.js</span>
+        <span class="module-desc">Core in-memory list manager</span>
+      </div>
+      <table>
+        <thead><tr><th>Method</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td><code>add(resource)</code></td><td>Adds a resource; requires name &amp; category; auto-assigns id</td></tr>
+          <tr><td><code>remove(id)</code></td><td>Hard-deletes by id; returns true/false</td></tr>
+          <tr><td><code>getById(id)</code></td><td>Returns one resource or null</td></tr>
+          <tr><td><code>update(id, fields)</code></td><td>Patches fields; protects id and createdAt</td></tr>
+          <tr><td><code>deactivate(id)</code></td><td>Soft-delete — sets active: false</td></tr>
+          <tr><td><code>reactivate(id)</code></td><td>Re-enables a deactivated resource</td></tr>
+          <tr><td><code>getAll(category?)</code></td><td>Returns active resources; optional category filter</td></tr>
+          <tr><td><code>getAllIncludingInactive()</code></td><td>Returns every record regardless of status</td></tr>
+          <tr><td><code>count()</code></td><td>Count of active resources</td></tr>
+          <tr><td><code>clear()</code></td><td>Wipes the list and resets the id counter</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="module-card">
+      <div class="module-card-header">
+        <span class="module-name">src/Validator.js</span>
+        <span class="module-desc">Field validation before storage</span>
+      </div>
+      <table>
+        <thead><tr><th>Export</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td><code>validatePhone(phone)</code></td><td>Checks format; accepts null/undefined (optional field)</td></tr>
+          <tr><td><code>validateCategory(category)</code></td><td>Must be one of 10 allowed values (food, shelter, clothing…)</td></tr>
+          <tr><td><code>validateHours(hours)</code></td><td>Free-form string; rejects empty string</td></tr>
+          <tr><td><code>validateZip(zip)</code></td><td>US ZIP format (12345 or 12345-6789); optional</td></tr>
+          <tr><td><code>validateResource(resource)</code></td><td>Runs all validations; returns { valid, errors[] }</td></tr>
+          <tr><td><code>VALID_CATEGORIES</code></td><td>Exported array of the 10 valid category strings</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="module-card">
+      <div class="module-card-header">
+        <span class="module-name">src/Search.js</span>
+        <span class="module-desc">Query utilities — pure functions, no side effects</span>
+      </div>
+      <table>
+        <thead><tr><th>Export</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td><code>searchByKeyword(resources, kw)</code></td><td>Case-insensitive across name, address, notes</td></tr>
+          <tr><td><code>filterByCategory(resources, cats)</code></td><td>Filter by one or multiple categories</td></tr>
+          <tr><td><code>filterActive(resources)</code></td><td>Returns only active resources</td></tr>
+          <tr><td><code>sortBy(resources, field, dir)</code></td><td>Sort ascending or descending by any field</td></tr>
+          <tr><td><code>paginate(resources, page, size)</code></td><td>Returns { items, total, page, totalPages }</td></tr>
+          <tr><td><code>query(resources, options)</code></td><td>Combined pipeline: active → keyword → category → sort → paginate</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="module-card">
+      <div class="module-card-header">
+        <span class="module-name">src/Stats.js</span>
+        <span class="module-desc">Reporting utilities for coordinators</span>
+      </div>
+      <table>
+        <thead><tr><th>Export</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td><code>countByCategory(resources)</code></td><td>Returns { food: 5, shelter: 3, … } for active resources</td></tr>
+          <tr><td><code>topCategory(resources)</code></td><td>Category name with the highest count</td></tr>
+          <tr><td><code>addedInLastDays(resources, days)</code></td><td>Count of resources created in the last N days</td></tr>
+          <tr><td><code>summary(resources)</code></td><td>Full metrics: total, active, inactive, byCategory, top…</td></tr>
+          <tr><td><code>findIncomplete(resources)</code></td><td>Active resources missing phone or address</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="module-card">
+      <div class="module-card-header">
+        <span class="module-name">src/Storage.js</span>
+        <span class="module-desc">JSON file persistence</span>
+      </div>
+      <table>
+        <thead><tr><th>Export</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td><code>load(filePath?)</code></td><td>Reads JSON array from disk; returns [] if file absent</td></tr>
+          <tr><td><code>save(resources, filePath?)</code></td><td>Writes JSON; creates parent directories automatically</td></tr>
+          <tr><td><code>deleteStore(filePath?)</code></td><td>Deletes the file; returns true/false</td></tr>
+          <tr><td><code>DEFAULT_PATH</code></td><td>&lt;cwd&gt;/data/resources.json</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2 class="section-heading">Test Coverage Status</h2>
+
+    <div style="background:var(--done-bg);border-left:3px solid var(--accent);padding:12px 18px;border-radius:0 4px 4px 0;margin-bottom:20px;font-size:14px;color:var(--done-fg);font-weight:600;">192 tests &mdash; all passing &nbsp;&middot;&nbsp; 6 suites complete</div>
+
+    <div class="coverage-grid">
+      <div class="coverage-card">
+        <div class="coverage-card-file">ResourceList.js</div>
+        <div class="coverage-card-label">Stmts 100% &middot; Branch 100% &middot; Fn 100%</div>
+        <span class="badge badge-done">100% all metrics</span>
+      </div>
+      <div class="coverage-card">
+        <div class="coverage-card-file">Validator.js</div>
+        <div class="coverage-card-label">Stmts 100% &middot; Branch 100% &middot; Fn 100%</div>
+        <span class="badge badge-done">100% all metrics</span>
+      </div>
+      <div class="coverage-card">
+        <div class="coverage-card-file">Search.js</div>
+        <div class="coverage-card-label">Stmts 100% &middot; Branch 95% &middot; Fn 100%</div>
+        <span class="badge badge-done">100% / 95% branches</span>
+      </div>
+      <div class="coverage-card">
+        <div class="coverage-card-file">Stats.js</div>
+        <div class="coverage-card-label">Stmts 100% &middot; Branch 82% &middot; Fn 100%</div>
+        <span class="badge badge-done">100% / 82% branches</span>
+      </div>
+      <div class="coverage-card">
+        <div class="coverage-card-file">Storage.js</div>
+        <div class="coverage-card-label">Stmts 100% &middot; Branch 73% &middot; Fn 100%</div>
+        <span class="badge badge-done">100% / 73% branches</span>
+      </div>
+      <div class="coverage-card">
+        <div class="coverage-card-file">Integration</div>
+        <div class="coverage-card-label">End-to-end add&rarr;save&rarr;load&rarr;query&rarr;stats</div>
+        <span class="badge badge-done">Complete</span>
+      </div>
+    </div>
+
+    <h3 style="font-family: Palatino,'Palatino Linotype',Georgia,serif; font-weight:normal; font-size:16px; color:var(--text); margin-bottom:10px;">Notable findings from testing</h3>
+    <ul class="gaps-list">
+      <li><em>validatePhone('')</em> &mdash; empty string is treated as &ldquo;not provided&rdquo; (valid) because the source guards with <code>!phone</code>. If distinguishing absent from empty matters, the source needs an explicit <code>phone === ''</code> check.</li>
+      <li><em>Timestamp precision</em> &mdash; <code>update()</code> and <code>reactivate()</code> produce the same <code>updatedAt</code> if called within the same millisecond. Harmless in production; tests use fake timers to verify reliably.</li>
+      <li><em>Remaining branch gaps</em> &mdash; uncovered branches are defensive guards unreachable in normal use: ternary fallbacks in Search.js, tie-break fallback in Stats.js, and fs.existsSync false-paths in Storage.js.</li>
+    </ul>
+  </section>
+
+  <section class="section">
+    <h2 class="section-heading">Improvement Plan &mdash; All Completed</h2>
+    <div class="priority-table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Task</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Write <code>tests/Search.test.js</code></td>
+            <td><span class="badge badge-done">Done</span></td>
+          </tr>
+          <tr>
+            <td>Write <code>tests/Storage.test.js</code></td>
+            <td><span class="badge badge-done">Done</span></td>
+          </tr>
+          <tr>
+            <td>Write <code>tests/Stats.test.js</code></td>
+            <td><span class="badge badge-done">Done</span></td>
+          </tr>
+          <tr>
+            <td>Fill gaps in <code>ResourceList.test.js</code></td>
+            <td><span class="badge badge-done">Done</span></td>
+          </tr>
+          <tr>
+            <td>Fill gaps in <code>Validator.test.js</code></td>
+            <td><span class="badge badge-done">Done</span></td>
+          </tr>
+          <tr>
+            <td>Write <code>tests/integration.test.js</code></td>
+            <td><span class="badge badge-done">Done</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2 class="section-heading">How to Run Tests</h2>
+    <div class="run-block">
+<span class="comment"># Install dependencies (first time only)</span>
+<span class="cmd">npm install</span>
+
+<span class="comment"># Run all tests with a coverage report</span>
+<span class="cmd">npm test</span>
+
+<span class="comment"># Run in watch mode while developing</span>
+<span class="cmd">npm run test:watch</span>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2 class="section-heading">What's Next</h2>
+    <div class="next-items">
+      <div class="next-item">
+        <span class="next-num">1</span>
+        <div class="next-text">
+          <strong>Wire validateResource() into ResourceList.add()</strong>
+          <span>Currently validation and adding are separate steps &mdash; connecting them prevents invalid records from ever being stored.</span>
+        </div>
+      </div>
+      <div class="next-item">
+        <span class="next-num">2</span>
+        <div class="next-text">
+          <strong>Add ESLint</strong>
+          <span>A linter catches style and logic issues automatically, before tests run.</span>
+        </div>
+      </div>
+      <div class="next-item">
+        <span class="next-num">3</span>
+        <div class="next-text">
+          <strong>Consider a CLI interface</strong>
+          <span>A src/cli.js would let coordinators manage resources from the terminal without needing a UI.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="doc-footer">
+    <span>Two Hearts Resource List &middot; Tent1977/Twoheartsresourcelist</span>
+    <span>Last updated November 16, 2026 &mdash; 192 tests passing</span>
+  </footer>
+
+</div>
+
+</body></html>
