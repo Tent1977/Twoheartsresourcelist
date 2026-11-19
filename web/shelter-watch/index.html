@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Shelter Watch — Washoe County shelter &amp; housing</title>
+  <meta name="description" content="Shelter and housing in Reno, Sparks and Washoe County — what places say, what residents say, and what checks out.">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.gstatic.com https://www.google.com https://www.recaptcha.net; style-src 'self'; img-src 'self' data:; connect-src 'self' https://*.googleapis.com https://*.firebaseio.com https://*.cloudfunctions.net; frame-src https://*.firebaseapp.com https://www.google.com https://www.recaptcha.net; worker-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'self'; object-src 'none'">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <link rel="preload" href="facilities.json" as="fetch" crossorigin>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip" href="#app">Skip to main content</a>
+
+  <aside class="help-strip" aria-label="Get help now">
+    <div class="wrap">
+      <a href="tel:911"><strong>911</strong> In danger</a>
+      <a href="tel:211"><strong>211</strong> Shelter &amp; help</a>
+      <a href="tel:7753294150"><strong>(775) 329-4150</strong> Domestic violence 24/7</a>
+      <a href="tel:988"><strong>988</strong> Crisis line</a>
+    </div>
+  </aside>
+
+  <header class="site-header">
+    <div class="wrap">
+      <a href="#/" class="brand">Shelter Watch</a>
+      <p class="tagline">Shelter and housing in Reno, Sparks &amp; Washoe County. What places say, what residents say, and what checks out.</p>
+    </div>
+  </header>
+
+  <div id="banner" class="wrap"><p class="banner"><strong>Test version.</strong> Listings were gathered in November 2026 and are not all confirmed. Call before you go. Reviews you post are saved only on this device for now.</p></div>
+
+  <main id="app" class="wrap" tabindex="-1">
+    <p class="loading">Loading places… If this takes a while, call <a href="tel:211">211</a> for shelter help now.</p>
+  </main>
+
+  <div id="sr-status" class="visually-hidden" role="status" aria-live="polite"></div>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p><strong>Who we are.</strong> Shelter Watch is an independent community project. The Advisory Board
+        of Lived Experience (ABLE) gives advice only. ABLE does not run, inspect or rate any place.</p>
+      <p><strong>Our connections.</strong> Some people on this project are connected to places listed here,
+        including Volunteers of America and RISE. Every place is scored with the same formula, shown on its page.</p>
+      <p><strong>Call before you go.</strong> We gathered these listings in November 2026 and have not
+        confirmed all of them by phone yet.</p>
+      <p>Reviews are the writers' own opinions. Report anything that crosses the line.</p>
+    </div>
+  </footer>
+
+  <script src="config.js" defer></script>
+  <script src="lib/schema.js" defer></script>
+  <script src="lib/moderation.js" defer></script>
+  <script src="lib/factcheck.js" defer></script>
+  <script src="lib/ratings.js" defer></script>
+  <script src="store.js" defer></script>
+  <script src="app.js" defer></script>
+  <script src="sw-register.js" defer></script>
+</body>
+</html>

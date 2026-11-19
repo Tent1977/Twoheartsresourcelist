@@ -1,0 +1,22 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "shelterwatch_comments",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "facilityId", "order": "ASCENDING" },
+        { "fieldPath": "status", "order": "ASCENDING" },
+        { "fieldPath": "reportCount", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "shelterwatch_comments",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "status", "order": "ASCENDING" },
+        { "fieldPath": "reportCount", "order": "ASCENDING" }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}
